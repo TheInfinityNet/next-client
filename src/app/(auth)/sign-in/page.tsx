@@ -10,7 +10,13 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
+import {
+  FieldValue,
+  FieldValues,
+  Path,
+  useForm,
+  UseFormSetError,
+} from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -29,13 +35,14 @@ import {
   SignInRequestSchema,
 } from "@/lib/api/schemas/sign-in-request-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { mapFieldErrorToFormError } from "@/lib/utils";
 
 export default function SignInPage() {
   const router = useRouter();
   const { toast } = useToast();
   const signInMutation = useSignInMutation();
 
-  const form = useForm<SignInRequestSchema>({
+  const signInForm = useForm<SignInRequestSchema>({
     resolver: zodResolver(signInRequestSchema),
     defaultValues: {
       email: "",
@@ -43,7 +50,7 @@ export default function SignInPage() {
     },
   });
 
-  const onSubmit = form.handleSubmit((values) => {
+  const onSubmit = signInForm.handleSubmit((values) => {
     signInMutation.mutate(values, {
       onSuccess: () => {
         toast({
@@ -57,6 +64,10 @@ export default function SignInPage() {
           title: "Sign in failed",
           description: error.message,
         });
+        switch (error.type) {
+          case "ValidationError":
+            mapFieldErrorToFormError(signInForm.setError, error.errors);
+        }
       },
     });
   });
@@ -71,10 +82,10 @@ export default function SignInPage() {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Form {...form}>
+        <Form {...signInForm}>
           <form onSubmit={onSubmit}>
             <FormField
-              control={form.control}
+              control={signInForm.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -90,7 +101,7 @@ export default function SignInPage() {
               )}
             />
             <FormField
-              control={form.control}
+              control={signInForm.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
@@ -105,7 +116,11 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
-            <Button className="w-full mt-4" type="submit">
+            <Button
+              className="w-full mt-4"
+              type="submit"
+              disabled={signInMutation.isPending}
+            >
               Sign In
             </Button>
           </form>

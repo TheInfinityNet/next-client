@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   if (body.email === "notfound@infinity.net") {
     return new Response(
       JSON.stringify({
-        type: "Unauthorized",
+        type: "ValidationError",
         message: "User not found",
         errors: {
           email: ["User not found"],
