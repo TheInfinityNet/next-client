@@ -1,10 +1,10 @@
-import { UserProfileResponse } from "infinity-net-api";
+import { UserProfileResponseSchema } from "@/lib/api/schemas/user-profile-response-schema";
 import { create } from "zustand";
 
 type CurrentUserProfileStore = {
-  currentUserProfile: UserProfileResponse | null;
+  currentUserProfile: UserProfileResponseSchema | null;
   actions: {
-    setCurrentUserProfile: (profile: UserProfileResponse) => void;
+    setCurrentUserProfile: (profile: UserProfileResponseSchema) => void;
   };
 };
 

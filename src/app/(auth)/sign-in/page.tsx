@@ -22,9 +22,13 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { SignInRequestSchema } from "infinity-net-api";
 import { useSignInMutation } from "@/hooks/apis/auth";
 import { useRouter } from "next/navigation";
+import {
+  signInRequestSchema,
+  SignInRequestSchema,
+} from "@/lib/api/schemas/sign-in-request-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -32,6 +36,7 @@ export default function SignInPage() {
   const signInMutation = useSignInMutation();
 
   const form = useForm<SignInRequestSchema>({
+    resolver: zodResolver(signInRequestSchema),
     defaultValues: {
       email: "",
       password: "",

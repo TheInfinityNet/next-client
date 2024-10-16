@@ -1,5 +1,5 @@
 import { useAccessToken, useRefreshToken } from "@/hooks/use-token-store";
-import { Axios } from "axios";
+import { Axios, AxiosRequestConfig, AxiosResponse } from "axios";
 
 const client = new Axios({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -38,5 +38,19 @@ client.interceptors.request.use(
     runWhen: (config) => !config.headers["No-Auth"],
   },
 );
+
+export const apiClient = {
+  post<TResponse = any, RRequest = any>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> {
+    return client.post<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      data,
+      config,
+    );
+  },
+};
 
 export default client;

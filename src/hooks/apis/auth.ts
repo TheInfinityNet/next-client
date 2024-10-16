@@ -1,18 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  postIdentityAuthSignIn,
-  SignInRequest,
-  SignInResponse,
-} from "infinity-net-api";
 import { useTokenActions } from "../use-token-store";
 import { useCurrentUserProfileActions } from "../use-current-user-profile-store";
+import { postIdentityAuthSignIn } from "@/lib/api/endpoints/post-identity-auth-sign-in";
+import {
+  PostIdentityAuthSignInError,
+  PostIdentityAuthSignInRequest,
+  PostIdentityAuthSignInResponse,
+} from "@/lib/api/models/post-identity-auth-sign-in";
 
 export function useSignInMutation() {
   const client = useQueryClient();
   const { setAccessToken, setRefreshToken } = useTokenActions();
   const { setCurrentUserProfile } = useCurrentUserProfileActions();
 
-  return useMutation<SignInResponse, Error, SignInRequest>({
+  return useMutation<
+    PostIdentityAuthSignInResponse,
+    PostIdentityAuthSignInError,
+    PostIdentityAuthSignInRequest
+  >({
     mutationKey: ["signIn"],
     mutationFn: (data) =>
       postIdentityAuthSignIn(data, {
@@ -21,10 +26,9 @@ export function useSignInMutation() {
         },
       }),
     onSuccess(data) {
-      setAccessToken(data.tokens?.accessToken as any);
-      setRefreshToken(data.tokens?.refreshToken as any);
-      setCurrentUserProfile(data.user!);
-
+      setAccessToken(data.tokens.accessToken);
+      setRefreshToken(data.tokens.refreshToken);
+      setCurrentUserProfile(data.user);
       client.invalidateQueries({
         queryKey: ["current-user-profile"],
       });
