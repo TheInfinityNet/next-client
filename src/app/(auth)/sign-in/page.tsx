@@ -125,7 +125,7 @@ export default function SignInPage() {
           Forgot Password?
         </Link>
         <p className="text-sm">
-          Don't have an account?{" "}
+          {"Don't have an account? "}
           <Link href="/sign-up" className="hover:text-primary">
             Sign Up
           </Link>
