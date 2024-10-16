@@ -10,13 +10,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  FieldValue,
-  FieldValues,
-  Path,
-  useForm,
-  UseFormSetError,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -71,6 +65,13 @@ export default function SignInPage() {
       },
     });
   });
+
+  const handleSocialSignIn = (provider: string) => {
+    toast({
+      title: "Social sign in",
+      description: `Signing in with ${provider}`,
+    });
+  };
 
   return (
     <Card className="mx-auto w-full max-w-md space-y-6">
@@ -129,13 +130,25 @@ export default function SignInPage() {
           Or sign in with social media
         </p>
         <div className="flex space-x-2">
-          <Button variant="outline" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSocialSignIn("Google")}
+          >
             Google
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSocialSignIn("Facebook")}
+          >
             Facebook
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => handleSocialSignIn("Twitter")}
+          >
             Twitter
           </Button>
         </div>
