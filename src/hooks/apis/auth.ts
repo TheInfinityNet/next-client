@@ -7,6 +7,7 @@ import {
   PostIdentityAuthSignInRequest,
   PostIdentityAuthSignInResponse,
 } from "@/lib/api/models/post-identity-auth-sign-in";
+import { isAxiosError } from "axios";
 
 export function useSignInMutation() {
   const client = useQueryClient();
@@ -19,12 +20,7 @@ export function useSignInMutation() {
     PostIdentityAuthSignInRequest
   >({
     mutationKey: ["signIn"],
-    mutationFn: (data) =>
-      postIdentityAuthSignIn(data, {
-        headers: {
-          "No-Auth": true,
-        },
-      }),
+    mutationFn: (data) => postIdentityAuthSignIn(data),
     onSuccess(data) {
       setAccessToken(data.tokens.accessToken);
       setRefreshToken(data.tokens.refreshToken);
@@ -33,5 +29,6 @@ export function useSignInMutation() {
         queryKey: ["current-user-profile"],
       });
     },
+    throwOnError: (error) => isAxiosError(error),
   });
 }

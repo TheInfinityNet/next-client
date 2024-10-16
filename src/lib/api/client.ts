@@ -1,7 +1,7 @@
 import { useAccessToken, useRefreshToken } from "@/hooks/use-token-store";
-import { Axios, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
-const client = new Axios({
+const client = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
@@ -15,7 +15,6 @@ client.interceptors.request.use(
       config.headers["Authorization"] = `Bearer ${accessToken}`;
       return config;
     }
-
     const refreshToken = useRefreshToken();
     if (refreshToken) {
       try {
@@ -26,10 +25,11 @@ client.interceptors.request.use(
         config.headers["Authorization"] = `Bearer ${accessToken}`;
         return config;
       } catch (error) {
-        return Promise.reject(error);
+        console.error("Failed to refresh token", error);
+        return config;
       }
     }
-    throw new Error("Unauthorized");
+    return config;
   },
   (error) => {
     return Promise.reject(error);
@@ -39,12 +39,33 @@ client.interceptors.request.use(
   },
 );
 
+client.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (isAxiosError(error)) {
+      if (error.code === "ERR_NETWORK") {
+        throw {
+          type: "NetworkError",
+          message: "Failed to connect to the server",
+        };
+      }
+      throw error.response?.data;
+    }
+    throw {
+      type: "UnknownError",
+      message: "An unknown error occurred",
+    };
+  },
+);
+
 export const apiClient = {
-  post<TResponse = any, RRequest = any>(
+  post: <TResponse = any, RRequest = any>(
     url: string,
     data: RRequest,
     config?: AxiosRequestConfig<RRequest>,
-  ): Promise<AxiosResponse<TResponse, RRequest>> {
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
     return client.post<TResponse, AxiosResponse<TResponse>, RRequest>(
       url,
       data,
