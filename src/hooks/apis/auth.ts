@@ -8,12 +8,12 @@ import {
   PostIdentityAuthSignInError,
   PostIdentityAuthSignInRequest,
   PostIdentityAuthSignInResponse,
-} from "@/lib/api/models/post-identity-auth-sign-in";
+} from "@/lib/api/schemas/post-identity-auth-sign-in-schema";
 import {
   PostIdentityAuthSignUpError,
   PostIdentityAuthSignUpRequest,
   PostIdentityAuthSignUpResponse,
-} from "@/lib/api/models/post-identity-auth-sign-up";
+} from "@/lib/api/schemas/post-identity-auth-sign-up-schema";
 
 export function useSignInMutation() {
   const client = useQueryClient();

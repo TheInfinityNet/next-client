@@ -1,9 +1,9 @@
 import { apiClient } from "../client";
 import { AxiosRequestConfig } from "axios";
-import type {
+import {
   PostIdentityAuthSignUpRequest,
   PostIdentityAuthSignUpResponse,
-} from "../models/post-identity-auth-sign-up";
+} from "../schemas/post-identity-auth-sign-up-schema";
 
 export async function postIdentityAuthSignUp(
   data: PostIdentityAuthSignUpRequest,
