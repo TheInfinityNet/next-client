@@ -38,7 +38,7 @@ export function NavigationMobile() {
       ))}
 
       <Sheet>
-        <SheetTrigger>
+        <SheetTrigger asChild>
           <Button variant={"ghost"} size="icon">
             <MenuIcon className="size-7" />
           </Button>
