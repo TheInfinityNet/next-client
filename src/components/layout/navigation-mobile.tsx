@@ -12,7 +12,7 @@ import { NavigationSidebar } from "./navigation-sidebar";
 
 export function NavigationMobile() {
   return (
-    <div className="flex justify-between">
+    <div className="border-t-border border-t grid grid-cols-4 h-14 place-items-center">
       {[
         {
           href: "/explore",
@@ -30,7 +30,7 @@ export function NavigationMobile() {
           icon: HomeIcon,
         },
       ].map((item) => (
-        <Button variant={"ghost"} key={item.title} size="icon" asChild>
+        <Button variant={"ghost"} key={item.title} asChild>
           <Link href={item.href}>
             <item.icon className="size-7" />
           </Link>
@@ -39,7 +39,7 @@ export function NavigationMobile() {
 
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant={"ghost"} size="icon">
+          <Button variant={"ghost"}>
             <MenuIcon className="size-7" />
           </Button>
         </SheetTrigger>

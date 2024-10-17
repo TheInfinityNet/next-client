@@ -7,9 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="h-full">
       <main className="flex w-full mx-auto md:grid sm:grid-cols-[auto_1fr] lg:grid-cols-[auto_1fr_auto]">
-        <aside className="hidden  sm:block sm:w-20 lg:w-80">
+        <aside className="hidden sm:block sm:w-20 lg:w-80 p-4">
           <NavigationTitle />
-          <NavigationSidebar />
+          <NavigationSidebar collapsable />
         </aside>
         <div className="w-full min-h-screen">
           <div className="min-h-[calc(100vh-3.5rem)] sm:min-h-screen w-full max-w-screen-md mx-auto">

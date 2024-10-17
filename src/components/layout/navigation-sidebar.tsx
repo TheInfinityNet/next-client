@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import {
   BellIcon,
   HomeIcon,
@@ -6,59 +7,85 @@ import {
   UsersIcon,
   UserIcon,
   CompassIcon,
+  SearchIcon,
+  SunIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import { useCurrentUserProfile } from "@/hooks/use-current-user-profile-store";
 
-export function NavigationSidebar() {
+interface NavItem {
+  title: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  requiresAuth?: boolean;
+  hideOnDesktop?: boolean;
+}
+
+const navItems: NavItem[] = [
+  { title: "Home", href: "/", icon: HomeIcon, requiresAuth: true },
+  { title: "Search", href: "/search", icon: SearchIcon, hideOnDesktop: true },
+  {
+    title: "Notifications",
+    href: "/notifications",
+    icon: BellIcon,
+    requiresAuth: true,
+  },
+  {
+    title: "Messages",
+    href: "/messages",
+    icon: MessageSquareIcon,
+    requiresAuth: true,
+  },
+  { title: "Groups", href: "/groups", icon: UsersIcon, requiresAuth: true },
+  { title: "Profile", href: "/profile", icon: UserIcon, requiresAuth: true },
+  { title: "Explore", href: "/explore", icon: CompassIcon },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: SettingsIcon,
+    requiresAuth: true,
+  },
+  { title: "Theme", href: "/theme", icon: SunIcon, hideOnDesktop: true },
+];
+
+export const NavigationSidebar: React.FC<{ collapsable?: boolean }> = ({
+  collapsable,
+}) => {
+  const currentUserProfile = useCurrentUserProfile();
+
   return (
-    <nav>
-      {[
-        {
-          title: "Home",
-          href: "/",
-          icon: HomeIcon,
+    <nav className="grid">
+      {navItems.map(
+        ({ title, href, icon: Icon, requiresAuth, hideOnDesktop }) => {
+          const isAuthDisabled = requiresAuth && !currentUserProfile;
+
+          return (
+            <Button
+              variant="ghost"
+              key={title}
+              asChild
+              className={cn(
+                "gap-4",
+                isAuthDisabled && "text-muted-foreground pointer-events-none",
+                hideOnDesktop && "xl:hidden",
+              )}
+            >
+              <Link href={href} prefetch={false}>
+                <Icon className="size-7" />
+                <span
+                  className={cn(
+                    "w-full text-start",
+                    collapsable ? "hidden lg:inline" : "lg:inline",
+                  )}
+                >
+                  {title}
+                </span>
+              </Link>
+            </Button>
+          );
         },
-        {
-          title: "Notifications",
-          href: "/notifications",
-          icon: BellIcon,
-        },
-        {
-          title: "Messages",
-          href: "/messages",
-          icon: MessageSquareIcon,
-        },
-        {
-          title: "Groups",
-          href: "/groups",
-          icon: UsersIcon,
-        },
-        {
-          title: "Profile",
-          href: "/profile",
-          icon: UserIcon,
-        },
-        {
-          title: "Explore",
-          href: "/explore",
-          icon: CompassIcon,
-        },
-        {
-          title: "Settings",
-          href: "/settings",
-          icon: SettingsIcon,
-        },
-      ].map((item) => (
-        <Link
-          key={item.title}
-          href={item.href}
-          className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-50"
-          prefetch={false}
-        >
-          <item.icon className="size-7" />
-          <span className="hidden lg:inline-block">{item.title}</span>
-        </Link>
-      ))}
+      )}
     </nav>
   );
-}
+};
