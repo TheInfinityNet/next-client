@@ -234,7 +234,7 @@ export default function UserProfileLayout({
 
       <section className="mt-2 mx-2" aria-label="Profile navigation">
         <Card>
-          <CardContent className="p-2 mx-2 overflow-x-scroll">
+          <CardContent className="py-2 px-0 mx-2 overflow-x-scroll">
             <div className="gap-1 flex ">
               <Button size={"sm"} variant={"default"} asChild>
                 <Link href="/users/1">

@@ -12,7 +12,7 @@ import { NavigationSidebar } from "./navigation-sidebar";
 
 export function NavigationMobile() {
   return (
-    <div className="border-t-border border-t grid grid-cols-4 h-14 place-items-center">
+    <div className="border-t-border border-t grid grid-cols-4 h-14 place-items-center bg-background">
       {[
         {
           href: "/explore",
