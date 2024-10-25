@@ -1,4 +1,4 @@
-import type { SignUpRequestSchema } from "@/lib/api/schemas/sign-up-request-schema";
+import { SignUpRequestSchema } from "@/lib/api/schemas/sign-up.schema";
 import { HttpStatusCode } from "axios";
 
 export async function POST(request: Request) {

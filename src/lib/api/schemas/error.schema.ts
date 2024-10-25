@@ -5,6 +5,7 @@ export const validationErrorResponseSchema = z.object({
   message: z.string(),
   errors: z.record(z.array(z.string())),
 });
+
 export type ValidationErrorResponseSchema = z.infer<
   typeof validationErrorResponseSchema
 >;

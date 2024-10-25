@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { genderSchema } from "./gender-schema";
+import { genderSchema } from "./gender.schema";
+import { validationErrorResponseSchema } from "./error.schema";
 
 export const signUpRequestSchema = z
   .object({
@@ -22,4 +23,15 @@ export const signUpRequestSchema = z
     message: "You must accept the terms and conditions",
     path: ["acceptTerms"],
   });
+export const signUpResponseSchema = z.object({
+  message: z.string(),
+});
+export const signUpErrorResponseSchema = z.discriminatedUnion("type", [
+  validationErrorResponseSchema,
+]);
+
+export type SignUpResponseSchema = z.infer<typeof signUpResponseSchema>;
 export type SignUpRequestSchema = z.infer<typeof signUpRequestSchema>;
+export type SignUpErrorResponseSchema = z.infer<
+  typeof signUpErrorResponseSchema
+>;

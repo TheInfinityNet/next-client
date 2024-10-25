@@ -1,4 +1,4 @@
-import { UserProfileResponseSchema } from "@/lib/api/schemas/user-profile-response-schema";
+import { UserProfileResponseSchema } from "@/lib/api/schemas/user-profile.schema";
 import { create } from "zustand";
 
 type CurrentUserProfileStore = {

@@ -22,13 +22,8 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  signUpRequestSchema,
-  type SignUpRequestSchema,
-} from "@/lib/api/schemas/sign-up-request-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mapFieldErrorToFormError } from "@/lib/utils";
-import { useSignUpMutation } from "@/hooks/apis/auth";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -37,6 +32,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSignUpMutation } from "@/hooks/apis/sign-up.mutation";
+import {
+  signUpRequestSchema,
+  SignUpRequestSchema,
+} from "@/lib/api/schemas/sign-up.schema";
 
 export default function SignUpPage() {
   const router = useRouter();
