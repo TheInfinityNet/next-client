@@ -72,6 +72,17 @@ export const apiClient = {
       config,
     );
   },
+
+  get: <TResponse = unknown, TQueryParams = unknown>(
+    url: string,
+    query?: TQueryParams,
+    config?: AxiosRequestConfig<TQueryParams>,
+  ): Promise<AxiosResponse<TResponse, TQueryParams>> => {
+    return client.get<TResponse, AxiosResponse<TResponse, TQueryParams>>(url, {
+      params: query,
+      ...config,
+    });
+  },
 };
 
 export default client;

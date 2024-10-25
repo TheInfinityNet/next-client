@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+export const userProfileStatusSchema = z.enum([
+  "Active",
+  "Inactive",
+  "Locked",
+  "Deleted",
+]);
+
 export const userProfileResponseSchema = z.object({
   id: z.coerce.string().uuid(),
   accountId: z.coerce.string().uuid(),

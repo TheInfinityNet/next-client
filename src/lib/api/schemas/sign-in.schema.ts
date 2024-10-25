@@ -15,8 +15,8 @@ export const signInErrorResponseSchema = z.discriminatedUnion("type", [
   validationErrorResponseSchema,
 ]);
 
-export type SignInResponseSchema = z.infer<typeof signInResponseSchema>;
 export type SignInRequestSchema = z.infer<typeof signInRequestSchema>;
+export type SignInResponseSchema = z.infer<typeof signInResponseSchema>;
 export type SignInErrorResponseSchema = z.infer<
   typeof signInErrorResponseSchema
 >;

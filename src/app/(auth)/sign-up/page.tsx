@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useSignUpMutation } from "@/hooks/apis/sign-up.mutation";
+import { useSignUpMutation } from "@/hooks/mutations/sign-up.mutation";
 import {
   signUpRequestSchema,
   SignUpRequestSchema,

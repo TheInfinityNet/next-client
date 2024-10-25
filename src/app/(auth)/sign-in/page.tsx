@@ -29,7 +29,7 @@ import {
   signInRequestSchema,
   SignInRequestSchema,
 } from "@/lib/api/schemas/sign-in.schema";
-import { useSignInMutation } from "@/hooks/apis/sign-in.mutation";
+import { useSignInMutation } from "@/hooks/mutations/sign-in.mutation";
 
 export default function SignInPage() {
   const router = useRouter();
