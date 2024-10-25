@@ -10,6 +10,7 @@ import {
   FlagIcon,
   GroupIcon,
   ImageIcon,
+  ListPlusIcon,
   LockIcon,
   NotepadTextIcon,
   PenIcon,
@@ -234,8 +235,8 @@ export default function UserProfileLayout({
 
       <section className="mt-2 mx-2" aria-label="Profile navigation">
         <Card>
-          <CardContent className="py-2 px-0 mx-2 overflow-x-scroll">
-            <div className="gap-1 flex ">
+          <CardContent className="py-2 px-1 mx-1 overflow-x-scroll">
+            <div className="gap-1 flex">
               <Button size={"sm"} variant={"default"} asChild>
                 <Link href="/users/1">
                   <RssIcon /> Posts
@@ -275,6 +276,12 @@ export default function UserProfileLayout({
                     <Link href="/users/1/likes">
                       <ThumbsUpIcon />
                       Likes
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/users/1/following">
+                      <ListPlusIcon />
+                      Following
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
