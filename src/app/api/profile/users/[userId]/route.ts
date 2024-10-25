@@ -25,15 +25,15 @@ export async function GET(
   request: Request,
   { params }: { params: GetUserProfileParamsSchema },
 ) {
-  if (request.headers.get("Authorization") !== "Bearer accessToken") {
-    return Response.json(
-      {
-        message: "Unauthorized",
-        type: "Unauthorized",
-      } satisfies GetUserProfileErrorResponseSchema,
-      { status: HttpStatusCode.Unauthorized },
-    );
-  }
+  // if (request.headers.get("Authorization") !== "Bearer accessToken") {
+  //   return Response.json(
+  //     {
+  //       message: "Unauthorized",
+  //       type: "Unauthorized",
+  //     } satisfies GetUserProfileErrorResponseSchema,
+  //     { status: HttpStatusCode.Unauthorized },
+  //   );
+  // }
 
   if (params.userId === "00000000-0000-0000-0000-000000000001") {
     return Response.json(

@@ -5,11 +5,17 @@ import {
   GetUserProfileQueriesSchema,
   GetUserProfileResponseSchema,
 } from "@/lib/api/schemas/get-user-profile.schema";
-import { queryOptions, useQuery } from "@tanstack/react-query";
+
+import {
+  queryOptions,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 
 export function createGetUserProfileQueryOptions(
   params: GetUserProfileParamsSchema,
-  query: GetUserProfileQueriesSchema,
+  query?: GetUserProfileQueriesSchema,
 ) {
   return queryOptions<
     GetUserProfileResponseSchema,
@@ -17,12 +23,14 @@ export function createGetUserProfileQueryOptions(
   >({
     queryKey: ["user-profile", params, query],
     queryFn: () => getUserProfileApi(params, query),
+    throwOnError: (error) => isAxiosError(error),
+    retry: 1,
   });
 }
 
 export function useGetUserProfileQuery(
   params: GetUserProfileParamsSchema,
-  query: GetUserProfileQueriesSchema,
+  query?: GetUserProfileQueriesSchema,
 ) {
-  return useQuery(createGetUserProfileQueryOptions(params, query));
+  return useSuspenseQuery(createGetUserProfileQueryOptions(params, query));
 }

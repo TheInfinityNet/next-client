@@ -10,32 +10,11 @@ const client = axios.create({
 
 client.interceptors.request.use(
   async (config) => {
-    const accessToken = useAccessToken();
-    if (accessToken) {
-      config.headers["Authorization"] = `Bearer ${accessToken}`;
-      return config;
-    }
-    const refreshToken = useRefreshToken();
-    if (refreshToken) {
-      try {
-        const response = await client.post("/auth/refresh", {
-          refreshToken,
-        });
-        const { accessToken } = response.data;
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
-        return config;
-      } catch (error) {
-        console.error("Failed to refresh token", error);
-        return config;
-      }
-    }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  null,
   {
-    runWhen: (config) => !config.headers["No-Auth"],
+    runWhen: (request) => !!!request.headers["No-Auth"],
   },
 );
 
