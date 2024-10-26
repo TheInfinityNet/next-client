@@ -4,8 +4,7 @@ import {
   resourceNotFoundErrorResponseSchema,
   unauthorizedErrorResponseSchema,
 } from "./error.schema";
-import { metadataPhotoResponseSchema } from "./metadata.schema";
-import { userProfileStatusSchema } from "./user-profile.schema";
+import { userProfileResponseSchema } from "./profile.schema";
 
 export const getUserProfileParamsSchema = z.object({
   userId: z.string(),
@@ -14,14 +13,12 @@ export const getUserProfileQueriesSchema = z.object({
   include: z.array(z.enum(["coverPhoto", "avatarPhoto"])).optional(),
 });
 
-export const getUserProfileResponseSchema = z.object({
-  id: z.string().uuid(),
-  accountId: z.string().uuid(),
-  username: z.string(),
-  name: z.string(),
-  coverPhoto: z.lazy(() => metadataPhotoResponseSchema).optional(),
-  avatarPhoto: z.lazy(() => metadataPhotoResponseSchema).optional(),
-  status: z.lazy(() => userProfileStatusSchema),
+export const getUserProfileResponseSchema = userProfileResponseSchema.pick({
+  id: true,
+  name: true,
+  cover: true,
+  avatar: true,
+  username: true,
 });
 export const getUserProfileErrorResponseSchema = z.discriminatedUnion("type", [
   resourceNotFoundErrorResponseSchema,

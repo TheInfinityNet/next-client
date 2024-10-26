@@ -1,17 +1,14 @@
 import { z } from "zod";
-import { createPostAudienceSchema } from "./post-audience.schema";
-import {
-  createPostContentSchema,
-  createPostFacetSchema,
-} from "./text-content.schema";
+import { postAudienceRequestSchema } from "./post-audience.schema";
+import { textContentRequestSchema } from "./text-content.schema";
 
 export const createPostBaseRequestSchema = z.object({
-  content: createPostFacetSchema.optional(),
-  audiance: createPostAudienceSchema,
+  content: textContentRequestSchema.optional(),
+  audiance: postAudienceRequestSchema,
 });
 export const createTextPostRequestSchema = createPostBaseRequestSchema.extend({
   type: z.literal("Text"),
-  content: createPostContentSchema,
+  content: textContentRequestSchema,
 });
 export const createPostPhotoRequestSchema = createPostBaseRequestSchema.extend({
   type: z.literal("Photo"),

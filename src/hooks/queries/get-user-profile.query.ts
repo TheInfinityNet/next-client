@@ -6,11 +6,7 @@ import {
   GetUserProfileResponseSchema,
 } from "@/lib/api/schemas/get-user-profile.schema";
 
-import {
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 
 export function createGetUserProfileQueryOptions(

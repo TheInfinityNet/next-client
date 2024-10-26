@@ -52,7 +52,6 @@ import {
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
 
 type UserProfileLayoutProps = {
   userId: string;
@@ -73,10 +72,10 @@ export function UserProfileLayout({
       <section aria-label="Profile cover image">
         {/* TODO: Refactor to ProfileCoverPhoto */}
         <AspectRatio ratio={3 / 1}>
-          {userProfile.coverPhoto ? (
+          {userProfile.cover?.url ? (
             <Image
               className="object-cover w-full h-full -z-10"
-              src={userProfile.coverPhoto.url}
+              src={userProfile.cover.url}
               width={600}
               height={200}
               alt={`${userProfile.name} cover photo`}
@@ -94,7 +93,7 @@ export function UserProfileLayout({
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
           <Avatar className="size-40">
             <AvatarImage
-              src={userProfile.avatarPhoto?.url}
+              src={userProfile.avatar?.url}
               className="object-cover"
               alt={`${userProfile.name} avatar`}
             />
