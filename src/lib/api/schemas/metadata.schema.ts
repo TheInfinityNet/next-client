@@ -9,22 +9,15 @@ export const metadataResponseSchema = z.object({
   deletedAt: z.string().datetime().optional(),
   url: z.string().url(),
 });
-export const metadataThumbnailResponseSchema = metadataResponseSchema.extend({
-  type: z.literal("Thumbnail"),
-  width: z.number(),
-  height: z.number(),
-});
 export const metadataPhotoResponseSchema = metadataResponseSchema.extend({
   type: z.literal("Photo"),
   width: z.number(),
   height: z.number(),
-  thumbnailId: z.string().uuid().optional(),
-  thumbnail: metadataThumbnailResponseSchema.optional(),
 });
 export const metadataVideoResponseSchema = metadataResponseSchema.extend({
   type: z.literal("Video"),
   thumbnailId: z.string().uuid().optional(),
-  thumbnail: metadataThumbnailResponseSchema.optional(),
+  thumbnail: metadataPhotoResponseSchema.optional(),
   duration: z.number(),
   width: z.number(),
   height: z.number(),
@@ -42,8 +35,6 @@ export const metadataTemporarilyResponseSchema = metadataResponseSchema.extend({
   temporary: z.literal(true),
   expiresAt: z.string().datetime(),
 });
-export const metadataTemporarilyThumbnailResponseSchema =
-  metadataTemporarilyResponseSchema.merge(metadataThumbnailResponseSchema);
 export const metadataTemporarilyPhotoResponseSchema =
   metadataTemporarilyResponseSchema.merge(metadataPhotoResponseSchema);
 export const metadataTemporarilyVideoResponseSchema =
@@ -54,9 +45,6 @@ export const metadataTemporarilyFileResponseSchema =
   metadataTemporarilyResponseSchema.merge(metadataFileResponseSchema);
 
 export type MetadataResponseSchema = z.infer<typeof metadataResponseSchema>;
-export type MetadataThumbnailResponseSchema = z.infer<
-  typeof metadataThumbnailResponseSchema
->;
 export type MetadataPhotoResponseSchema = z.infer<
   typeof metadataPhotoResponseSchema
 >;
@@ -71,9 +59,6 @@ export type MetadataFileResponseSchema = z.infer<
 >;
 export type MetadataTemporarilyResponseSchema = z.infer<
   typeof metadataTemporarilyResponseSchema
->;
-export type MetadataTemporarilyThumbnailResponseSchema = z.infer<
-  typeof metadataTemporarilyThumbnailResponseSchema
 >;
 export type MetadataTemporarilyPhotoResponseSchema = z.infer<
   typeof metadataTemporarilyPhotoResponseSchema
