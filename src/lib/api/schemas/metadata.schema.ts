@@ -56,10 +56,12 @@ export const baseMetadataResponseSchema = baseMetadataSchema
     ownerId: true,
   })
   .extend({
-    owner: baseProfileSchema.pick({
-      id: true,
-      type: true,
-    }),
+    owner: baseProfileSchema
+      .pick({
+        id: true,
+        type: true,
+      })
+      .optional(),
   });
 export const photoMetadataResponseSchema = baseMetadataResponseSchema.merge(
   baseMetadataPhotoSpecificSchema,
@@ -99,3 +101,6 @@ export const metadataTemporarilyResponseSchema = z.discriminatedUnion("type", [
   audioMetadataTemporarilyResponseSchema,
   fileMetadataTemporarilyResponseSchema,
 ]);
+export type MetadataPhotoResponseSchema = z.infer<
+  typeof photoMetadataResponseSchema
+>;

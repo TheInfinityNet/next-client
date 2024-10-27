@@ -50,8 +50,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
-import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 
 type UserProfileLayoutProps = {
   userId: string;
@@ -69,23 +69,7 @@ export function UserProfileLayout({
 
   return (
     <Fragment>
-      <section aria-label="Profile cover image">
-        {/* TODO: Refactor to ProfileCoverPhoto */}
-        <AspectRatio ratio={3 / 1}>
-          {userProfile.cover?.url ? (
-            <Image
-              className="object-cover w-full h-full -z-10"
-              src={userProfile.cover.url}
-              width={600}
-              height={200}
-              alt={`${userProfile.name} cover photo`}
-            />
-          ) : (
-            <div className="w-full h-full bg-accent-foreground/10" />
-          )}
-        </AspectRatio>
-      </section>
-
+      <ProfileCoverPhoto profileId={userId} url={userProfile.cover?.url} />
       <section
         aria-label="Profile information"
         className="-mt-20 md:-mt-12 mx-2"

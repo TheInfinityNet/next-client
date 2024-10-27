@@ -1,6 +1,12 @@
 import { z } from "zod";
 import { photoMetadataResponseSchema } from "./metadata.schema";
 
+export const profileStatus = z.enum([
+  "Active",
+  "Inactive",
+  "Locked",
+  "Deleted",
+]);
 export const baseProfileSchema = z.object({
   id: z.coerce.string().uuid(),
   accountId: z.coerce.string().uuid(),
@@ -13,6 +19,7 @@ export const baseProfileSchema = z.object({
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   deletedAt: z.string().datetime().optional(),
+  status: profileStatus,
 });
 
 export const userProfileSchema = baseProfileSchema.extend({

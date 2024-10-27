@@ -15,7 +15,6 @@ function metadataPhotoFaker(): MetadataPhotoResponseSchema {
     size: faker.number.int(),
     width: faker.number.int(),
     height: faker.number.int(),
-    ownerId: faker.string.uuid(),
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
   };
@@ -47,11 +46,10 @@ export async function GET(
     return Response.json(
       {
         id: "00000000-0000-0000-0000-000000000002",
-        accountId: "00000000-0000-0000-0000-000000000002",
         name: "The Infinity Net",
         username: "infinity",
-        coverPhoto: metadataPhotoFaker(),
-        avatarPhoto: metadataPhotoFaker(),
+        cover: metadataPhotoFaker(),
+        avatar: metadataPhotoFaker(),
         status: "Active",
       } satisfies GetUserProfileResponseSchema,
       { status: HttpStatusCode.Ok },
@@ -60,11 +58,10 @@ export async function GET(
     return Response.json(
       {
         id: "00000000-0000-0000-0000-000000000003",
-        accountId: "00000000-0000-0000-0000-000000000003",
         name: "The Infinity Net",
         username: "infinity",
-        coverPhoto: metadataPhotoFaker(),
-        avatarPhoto: metadataPhotoFaker(),
+        cover: metadataPhotoFaker(),
+        avatar: metadataPhotoFaker(),
         status: "Inactive",
       } satisfies GetUserProfileResponseSchema,
       { status: HttpStatusCode.Ok },
@@ -73,11 +70,10 @@ export async function GET(
     return Response.json(
       {
         id: "00000000-0000-0000-0000-000000000004",
-        accountId: "00000000-0000-0000-0000-000000000004",
         name: "The Infinity Net",
         username: "infinity",
-        coverPhoto: metadataPhotoFaker(),
-        avatarPhoto: metadataPhotoFaker(),
+        cover: metadataPhotoFaker(),
+        avatar: metadataPhotoFaker(),
         status: "Locked",
       } satisfies GetUserProfileResponseSchema,
       { status: HttpStatusCode.Ok },
@@ -86,11 +82,10 @@ export async function GET(
     return Response.json(
       {
         id: "00000000-0000-0000-0000-000000000005",
-        accountId: "00000000-0000-0000-0000-000000000005",
         name: "The Infinity Net",
         username: "infinity",
-        coverPhoto: metadataPhotoFaker(),
-        avatarPhoto: metadataPhotoFaker(),
+        cover: metadataPhotoFaker(),
+        avatar: metadataPhotoFaker(),
         status: "Deleted",
       } satisfies GetUserProfileResponseSchema,
       { status: HttpStatusCode.Ok },

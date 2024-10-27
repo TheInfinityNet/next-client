@@ -19,6 +19,7 @@ export const getUserProfileResponseSchema = userProfileResponseSchema.pick({
   cover: true,
   avatar: true,
   username: true,
+  status: true,
 });
 export const getUserProfileErrorResponseSchema = z.discriminatedUnion("type", [
   resourceNotFoundErrorResponseSchema,
