@@ -36,10 +36,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
+import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
+import { ProfileActionsDropdown } from "./profile-actions-dropdown";
 
 type UserProfileLayoutProps = {
   userId: string;
@@ -51,6 +53,9 @@ export function UserProfileLayout({
 }: UserProfileLayoutProps) {
   const getUserProfileQuery = useSuspenseQuery(
     createGetUserProfileQueryOptions({ userId }),
+  );
+  const { data: actions } = useQuery(
+    createGetProfileActionsQueryOptions({ profileId: userId }),
   );
 
   const { data: userProfile } = getUserProfileQuery;
@@ -132,22 +137,22 @@ export function UserProfileLayout({
           <CardContent className="py-2 px-1 mx-1 overflow-x-scroll">
             <div className="gap-1 flex">
               <Button size={"sm"} variant={"default"} asChild>
-                <Link href="/users/1">
+                <Link href={`/users/${userId}`}>
                   <RssIcon /> Posts
                 </Link>
               </Button>
               <Button size={"sm"} variant={"secondary"} asChild>
-                <Link href="/users/1/about">
+                <Link href={`/users/${userId}/about`}>
                   <NotepadTextIcon /> About
                 </Link>
               </Button>
               <Button size={"sm"} variant={"secondary"} asChild>
-                <Link href="/users/1/friends">
+                <Link href={`/users/${userId}/friends`}>
                   <UsersIcon /> Friends
                 </Link>
               </Button>
               <Button size={"sm"} variant={"secondary"} asChild>
-                <Link href="/users/1/photos">
+                <Link href={`/users/${userId}/photos`}>
                   <ImageIcon /> Photos
                 </Link>
               </Button>
@@ -161,25 +166,25 @@ export function UserProfileLayout({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem asChild>
-                    <Link href="/users/1/videos">
+                    <Link href={`/users/${userId}/video`}>
                       <VideoIcon />
                       Videos
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/users/1/likes">
+                    <Link href={`/users/${userId}/likes`}>
                       <ThumbsUpIcon />
                       Likes
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/users/1/following">
+                    <Link href={`/users/${userId}/following`}>
                       <ListPlusIcon />
                       Following
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/users/1/groups">
+                    <Link href={`/users/${userId}/groups`}>
                       <GroupIcon />
                       Groups
                     </Link>
@@ -187,49 +192,7 @@ export function UserProfileLayout({
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              {/* TODO: Refactor to ProfileActionDropdown({userId}) */}
-              {/* API: /profile/users/:userId/actions */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size={"sm"} variant={"secondary"} className="ml-auto">
-                    <EllipsisIcon />
-                    <span className="sr-only">Actions</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <EyeIcon /> View As
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <SearchIcon />
-                    Search
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <PenIcon />
-                    Edit Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <ActivityIcon />
-                    Activity Log
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <LockIcon />
-                    Lock Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <FlagIcon />
-                    Report Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <UserXIcon />
-                    Delete Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <UserPlusIcon />
-                    Create another profile
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <ProfileActionsDropdown profileId={userId} />
             </div>
           </CardContent>
         </Card>

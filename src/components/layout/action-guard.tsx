@@ -4,6 +4,8 @@ type ActionGuardProps<T> = {
   requiredActions: keyof T | Array<keyof T>;
   loading?: boolean;
   condition?: "ALL" | "ANY";
+  fallback?: React.ReactNode;
+  loadingFallback?: React.ReactNode;
 };
 
 export function ActionGuard<T>({
@@ -12,8 +14,10 @@ export function ActionGuard<T>({
   requiredActions,
   loading,
   condition = "ALL",
+  fallback,
+  loadingFallback,
 }: ActionGuardProps<T>): React.ReactNode {
-  if (loading || !actions) return null;
+  if (loading || !actions) return loadingFallback || null;
 
   const isAllowed = Array.isArray(requiredActions)
     ? condition === "ALL"
@@ -21,7 +25,7 @@ export function ActionGuard<T>({
       : requiredActions.some((action) => actions[action])
     : actions[requiredActions];
 
-  if (!isAllowed) return null;
+  if (!isAllowed) return fallback || null;
 
-  return <>{children}</>;
+  return children;
 }

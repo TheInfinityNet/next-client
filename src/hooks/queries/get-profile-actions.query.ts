@@ -4,10 +4,14 @@ import { queryOptions } from "@tanstack/react-query";
 
 export function createGetProfileActionsQueryOptions(
   params: GetProfileActionsParamsSchema,
+  options?: {
+    enabled?: boolean;
+  },
 ) {
   return queryOptions({
     queryKey: ["profile-actions", params],
     queryFn: () => getProfileActionsApi(params),
     retry: 1,
+    ...options,
   });
 }
