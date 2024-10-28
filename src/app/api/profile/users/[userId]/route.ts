@@ -6,19 +6,7 @@ import {
 import { MetadataPhotoResponseSchema } from "@/lib/api/schemas/metadata.schema";
 import { HttpStatusCode } from "axios";
 import { faker } from "@faker-js/faker";
-
-function metadataPhotoFaker(): MetadataPhotoResponseSchema {
-  return {
-    id: faker.string.uuid(),
-    type: "Photo",
-    url: faker.image.url(),
-    size: faker.number.int(),
-    width: faker.number.int(),
-    height: faker.number.int(),
-    createdAt: faker.date.past().toISOString(),
-    updatedAt: faker.date.past().toISOString(),
-  };
-}
+import { metadataPhotoFaker } from "@/lib/faker";
 
 export async function GET(
   request: Request,

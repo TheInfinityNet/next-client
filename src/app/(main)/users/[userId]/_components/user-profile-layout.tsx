@@ -23,24 +23,10 @@ import {
   UsersIcon,
   UserXIcon,
   VideoIcon,
-  XIcon,
 } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { Fragment } from "react";
 
 import {
@@ -52,6 +38,8 @@ import {
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
+import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
+import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
 
 type UserProfileLayoutProps = {
   userId: string;
@@ -103,26 +91,7 @@ export function UserProfileLayout({
               <div className="font-medium text-muted-foreground">
                 {`@${userProfile.username}`}
               </div>
-              {/* TODO: Refactor to ProfileFriendAvatarListWithCount({userId}) */}
-              {/* API: /profile/users/:userId/friend-summary */}
-              <div>
-                <div className="font-bold" aria-label="Friends count">
-                  60 friends
-                </div>
-                <div className="flex mr-2" aria-label="Friend avatars">
-                  {Array.from({ length: 8 }).map((_, index) => (
-                    <div key={index} className="h-10 w-8">
-                      <Avatar className="size-10">
-                        <AvatarImage
-                          src="https://github.com/shadcn.png"
-                          alt={`Friend ${index + 1} avatar`}
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ProfileFriendsSummaryPreview userId={userId} />
             </div>
             {/* TODO: Refactor to ProfileActionButtons({userId}) */}
             {/* API: /profile/users/:userId/actions */}
@@ -154,88 +123,7 @@ export function UserProfileLayout({
         </div>
       </section>
 
-      {/* TODO: Refactor to ProfileFriendSuggestionCarousel({userId}) */}
-      {/* API: /profile/users/:userId/friend-suggestions */}
-      <section aria-label="Friends suggestion" className="mt-2 mx-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex justify-between">
-              People you may know
-              <Button
-                variant={"link"}
-                asChild
-                className="p-0 h-fit font-semibold justify-end"
-              >
-                <Link href="/friends/suggestions">See all</Link>
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Carousel
-              opts={{
-                align: "start",
-              }}
-              className="w-full"
-              orientation="horizontal"
-            >
-              <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem
-                    key={index}
-                    className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
-                  >
-                    <Card aria-label="Profile card">
-                      <CardHeader className="aspect-square p-0 relative">
-                        <Avatar className="w-full h-full rounded-none object-fill">
-                          <AvatarImage
-                            src="https://github.com/shadcn.png"
-                            alt="Nguyen Minh Tuan avatar"
-                          />
-                          <AvatarFallback className="rounded-none">
-                            CN
-                          </AvatarFallback>
-                        </Avatar>
-                        <Button
-                          className="absolute top-0 right-0 bg-accent-foreground/10 hover:bg-accent-foreground/20 rounded-full"
-                          variant={"ghost"}
-                          size={"icon"}
-                        >
-                          <XIcon />
-                        </Button>
-                      </CardHeader>
-                      <CardContent className="p-2">
-                        <div className="font-bold my-1">Nguyen Minh Tuan</div>
-                        <div className="flex my-1 h-6">
-                          <Avatar className="size-6">
-                            <AvatarImage
-                              src="https://github.com/shadcn.png"
-                              alt="Nguyen Minh Tuan avatar"
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                          </Avatar>
-                          <span className="ml-2">6 mutual friends</span>
-                        </div>
-                      </CardContent>
-                      <CardFooter className="p-2">
-                        <Button
-                          variant={"secondary"}
-                          className="w-full"
-                          aria-label="Add friend"
-                        >
-                          <UserPlusIcon />
-                          Add friend
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-0 -translate-x-1/2" />
-              <CarouselNext className="right-0 translate-x-1/2" />
-            </Carousel>
-          </CardContent>
-        </Card>
-      </section>
+      <ProfileFriendsSuggestionCarousel userId={userId} />
 
       {/* TODO: Refactor to ProfileNavigation({userId}) */}
       {/* API: /profile/users/:userId/navigation */}
