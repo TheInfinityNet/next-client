@@ -29,3 +29,7 @@ export async function GET(request: NextRequest) {
     nextCursor: faker.string.uuid(),
   } satisfies GetFriendsSuggestionResponseSchema);
 }
+import { NextRequest } from "next/server";
+export async function GET(request: NextRequest) {
+  return Response.json({ message: "get-friends-suggestion" });
+}

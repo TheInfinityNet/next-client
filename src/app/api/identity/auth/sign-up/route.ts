@@ -1,7 +1,8 @@
 import { SignUpRequestSchema } from "@/lib/api/schemas/sign-up.schema";
 import { HttpStatusCode } from "axios";
+import { NextRequest } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const body: SignUpRequestSchema = await request.json();
 
   if (body.email === "conflict@infinity.net") {
