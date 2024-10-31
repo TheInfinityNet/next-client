@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { userProfileResponseSchema } from "./profile.schema";
 import { unauthorizedErrorResponseSchema } from "./error.schema";
+import { friendStatusSchema } from "./friend-status.schema";
 
 export const getFriendsSuggestionQuerySchema = z.object({
   userId: z.string().optional(),
@@ -17,6 +18,7 @@ export const getFriendsSuggestionResponseSchema = z.object({
       })
       .extend({
         mutualFriendsCount: z.number().optional(),
+        status: z.literal(friendStatusSchema.enum.NotConnected),
       }),
   ),
   nextCursor: z.string().optional(),

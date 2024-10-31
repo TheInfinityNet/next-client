@@ -1,33 +1,25 @@
 "use client";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
-  ActivityIcon,
   ChevronDownIcon,
+  ChevronsDownIcon,
   ChevronsUpIcon,
-  EllipsisIcon,
-  EyeIcon,
-  FlagIcon,
   GroupIcon,
   ImageIcon,
   ListPlusIcon,
-  LockIcon,
   NotepadTextIcon,
   PenIcon,
   PlusIcon,
   RssIcon,
-  SearchIcon,
   ThumbsUpIcon,
-  UserPlusIcon,
   UsersIcon,
-  UserXIcon,
   VideoIcon,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import {
   DropdownMenu,
@@ -36,11 +28,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
-import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
 import { ProfileActionsDropdown } from "./profile-actions-dropdown";
 
 type UserProfileLayoutProps = {
@@ -54,9 +45,12 @@ export function UserProfileLayout({
   const getUserProfileQuery = useSuspenseQuery(
     createGetUserProfileQueryOptions({ userId }),
   );
-  const { data: actions } = useQuery(
-    createGetProfileActionsQueryOptions({ profileId: userId }),
-  );
+  const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
+    useState<boolean>(true);
+
+  useEffect(() => {
+    console.log(isShowFriendSuggestion);
+  }, [isShowFriendSuggestion]);
 
   const { data: userProfile } = getUserProfileQuery;
 
@@ -119,16 +113,28 @@ export function UserProfileLayout({
                 variant={"secondary"}
                 className="w-full sm:w-fit"
                 aria-label="Hide friends suggestion"
+                onClick={() => setIsShowFriendSuggestion((prev) => !prev)}
               >
-                <ChevronsUpIcon />
-                <span className="sr-only">Hide friends suggestion</span>
+                {isShowFriendSuggestion ? (
+                  <ChevronsUpIcon />
+                ) : (
+                  <ChevronsDownIcon />
+                )}
+
+                <span className="sr-only">
+                  {isShowFriendSuggestion
+                    ? "Hide friends suggestion"
+                    : "Show friends suggestion"}
+                </span>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      <ProfileFriendsSuggestionCarousel userId={userId} />
+      {isShowFriendSuggestion ? (
+        <ProfileFriendsSuggestionCarousel userId={userId} />
+      ) : null}
 
       {/* TODO: Refactor to ProfileNavigation({userId}) */}
       {/* API: /profile/users/:userId/navigation */}

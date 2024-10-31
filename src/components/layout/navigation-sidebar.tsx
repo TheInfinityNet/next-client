@@ -9,6 +9,7 @@ import {
   CompassIcon,
   SearchIcon,
   SunIcon,
+  UserPlusIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -35,6 +36,12 @@ const navItems: NavItem[] = [
     title: "Messages",
     href: "/messages",
     icon: MessageSquareIcon,
+    requiresAuth: true,
+  },
+  {
+    title: "Friends",
+    href: "/friends",
+    icon: UserPlusIcon,
     requiresAuth: true,
   },
   { title: "Groups", href: "/groups", icon: UsersIcon, requiresAuth: true },
