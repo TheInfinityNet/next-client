@@ -1,4 +1,4 @@
-import { getFriendsSuggestionApi } from "@/lib/api/apis/get-friends-suggestion.api";
+import { getFriendSuggestionsApi } from "@/lib/api/apis/get-friends-suggestion.api";
 import {
   GetFriendsSuggestionQuerySchema,
   GetFriendsSuggestionResponseSchema,
@@ -13,7 +13,7 @@ export function createGetFriendsSuggestionQueryOptions(
   return infiniteQueryOptions<GetFriendsSuggestionResponseSchema>({
     queryKey,
     queryFn: ({ pageParam }) => {
-      return getFriendsSuggestionApi({
+      return getFriendSuggestionsApi({
         ...query,
         cursor: pageParam as string,
       });

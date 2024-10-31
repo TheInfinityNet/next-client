@@ -1,11 +1,7 @@
 import { NextRequest } from "next/server";
+import type { GetFriendSentRequestsResponseSchema } from "@/lib/api/schemas/get-friend-sent-requests.schema";
 import { metadataPhotoFaker } from "@/lib/faker";
 import { faker } from "@faker-js/faker";
-import { GetFriendListResponseSchema } from "@/lib/api/schemas/get-friend-list.schema";
-
-export async function POST(request: NextRequest) {
-  return Response.json({ message: "add-friend" });
-}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -22,16 +18,16 @@ export async function GET(request: NextRequest) {
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
-        status: "Connected",
+        status: "RequestSent",
       },
       ...Array.from({ length: limit }, () => ({
         id: faker.string.uuid(),
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
-        status: "Connected" as const,
+        status: "RequestSent" as const,
       })),
     ],
     nextCursor: faker.string.uuid(),
-  } satisfies GetFriendListResponseSchema);
+  } satisfies GetFriendSentRequestsResponseSchema);
 }
