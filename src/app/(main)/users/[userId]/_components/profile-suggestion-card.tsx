@@ -43,7 +43,7 @@ export function ProfileSuggestionCard({
   };
 
   return (
-    <Card aria-label="Profile card">
+    <Card aria-label="Profile card" className="overflow-hidden">
       <CardHeader className="aspect-square p-0 relative">
         <Avatar className="w-full h-full rounded-none object-fill">
           <AvatarImage src={avatarUrl} alt={`${name} avatar`} />

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
+import { UserFriendCard } from "@/app/_components/user-friend-card";
 import {
   Carousel,
   CarouselContent,
@@ -10,12 +11,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ProfileSuggestionCard } from "./profile-suggestion-card";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import { createGetFriendsSuggestionQueryOptions } from "@/hooks/queries/get-friends-suggestion.query";
-import { useCallback, useMemo, useRef } from "react";
 import { GetFriendsSuggestionResponseSchema } from "@/lib/api/schemas/get-friends-suggestion.schema";
-import { ProfileSuggestionCardLoading } from "./profile-suggestion-card-loading";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback, useMemo, useRef } from "react";
+import { UserFriendCardLoading } from "./user-friend-card-loading";
 
 type ProfileFriendsSummaryPreviewProps = {
   userId: string;
@@ -73,7 +73,7 @@ export function ProfileFriendsSuggestionCarousel({
               asChild
               className="p-0 h-fit font-semibold justify-end"
             >
-              <Link href="/friends/suggestions">See all</Link>
+              <Link href="/friends">See all</Link>
             </Button>
           </CardTitle>
         </CardHeader>
@@ -91,11 +91,12 @@ export function ProfileFriendsSuggestionCarousel({
                   key={index}
                   className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
                 >
-                  <ProfileSuggestionCard
+                  <UserFriendCard
                     name={friend.name}
                     userId={friend.id}
                     avatarUrl={friend.avatar?.url}
                     totalMutualFriend={friend.mutualFriendsCount}
+                    status="NotConnected"
                   />
                 </CarouselItem>
               ))}
@@ -104,18 +105,18 @@ export function ProfileFriendsSuggestionCarousel({
                 className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
                 ref={lastElementRef}
               >
-                <ProfileSuggestionCardLoading />
+                <UserFriendCardLoading />
               </CarouselItem>
               {isLoading && (
                 <>
                   <CarouselItem className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]">
-                    <ProfileSuggestionCardLoading />
+                    <UserFriendCardLoading />
                   </CarouselItem>
                   <CarouselItem className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]">
-                    <ProfileSuggestionCardLoading />
+                    <UserFriendCardLoading />
                   </CarouselItem>
                   <CarouselItem className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]">
-                    <ProfileSuggestionCardLoading />
+                    <UserFriendCardLoading />
                   </CarouselItem>
                 </>
               )}

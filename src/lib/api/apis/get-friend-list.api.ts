@@ -1,1 +1,15 @@
-export async function getFriendListApi() {}
+import { apiClient } from "../client";
+import {
+  GetFriendListQuerySchema,
+  GetFriendListResponseSchema,
+} from "../schemas/get-friend-list.schema";
+
+export async function getFriendListApi(
+  query?: GetFriendListQuerySchema,
+): Promise<GetFriendListResponseSchema> {
+  const response = await apiClient.get<GetFriendListResponseSchema>(
+    "/friends",
+    query,
+  );
+  return response.data;
+}

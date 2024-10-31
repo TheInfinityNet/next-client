@@ -3,12 +3,12 @@ import { userProfileResponseSchema } from "./profile.schema";
 import { unauthorizedErrorResponseSchema } from "./error.schema";
 import { friendStatusSchema } from "./friend-status.schema";
 
-export const getFriendsSuggestionQuerySchema = z.object({
+export const getFriendSentRequestsQuerySchema = z.object({
   userId: z.string().optional(),
   cursor: z.string().nullable().optional(),
   limit: z.number().optional(),
 });
-export const getFriendsSuggestionResponseSchema = z.object({
+export const getFriendSentRequestsResponseSchema = z.object({
   items: z.array(
     userProfileResponseSchema
       .pick({
@@ -18,24 +18,24 @@ export const getFriendsSuggestionResponseSchema = z.object({
       })
       .extend({
         mutualFriendsCount: z.number().optional(),
-        status: z.literal(friendStatusSchema.enum.NotConnected),
+        status: z.literal(friendStatusSchema.enum.RequestSent),
       }),
   ),
   nextCursor: z.string().optional(),
   prevCursor: z.string().optional(),
 });
 
-export const getFriendsSuggestionErrorResponseSchema = z.discriminatedUnion(
+export const getFriendSentRequestsErrorResponseSchema = z.discriminatedUnion(
   "type",
   [unauthorizedErrorResponseSchema],
 );
 
-export type GetFriendsSuggestionQuerySchema = z.infer<
-  typeof getFriendsSuggestionQuerySchema
+export type GetFriendSentRequestsQuerySchema = z.infer<
+  typeof getFriendSentRequestsQuerySchema
 >;
-export type GetFriendsSuggestionResponseSchema = z.infer<
-  typeof getFriendsSuggestionResponseSchema
+export type GetFriendSentRequestsResponseSchema = z.infer<
+  typeof getFriendSentRequestsResponseSchema
 >;
-export type GetFriendsSuggestionErrorResponseSchema = z.infer<
-  typeof getFriendsSuggestionErrorResponseSchema
+export type GetFriendSentRequestsErrorResponseSchema = z.infer<
+  typeof getFriendSentRequestsErrorResponseSchema
 >;

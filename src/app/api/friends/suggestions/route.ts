@@ -18,18 +18,16 @@ export async function GET(request: NextRequest) {
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
+        status: "NotConnected",
       },
       ...Array.from({ length: limit }, () => ({
         id: faker.string.uuid(),
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
+        status: "NotConnected" as const,
       })),
     ],
     nextCursor: faker.string.uuid(),
   } satisfies GetFriendsSuggestionResponseSchema);
-}
-import { NextRequest } from "next/server";
-export async function GET(request: NextRequest) {
-  return Response.json({ message: "get-friends-suggestion" });
 }

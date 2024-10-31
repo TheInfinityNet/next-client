@@ -4,7 +4,7 @@ import {
   GetFriendsSuggestionResponseSchema,
 } from "../schemas/get-friends-suggestion.schema";
 
-export async function getFriendsSuggestionApi(
+export async function getFriendSuggestionsApi(
   query?: GetFriendsSuggestionQuerySchema,
 ): Promise<GetFriendsSuggestionResponseSchema> {
   const response = await apiClient.get<GetFriendsSuggestionResponseSchema>(

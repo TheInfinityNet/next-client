@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import type { GetFriendRequestsResponseSchema } from "@/lib/api/schemas/get-friend-requests.schema";
+import type { GetFriendSentRequestsResponseSchema } from "@/lib/api/schemas/get-friend-sent-requests.schema";
 import { metadataPhotoFaker } from "@/lib/faker";
 import { faker } from "@faker-js/faker";
 
@@ -18,16 +18,16 @@ export async function GET(request: NextRequest) {
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
-        status: "RequestReceived",
+        status: "RequestSent",
       },
       ...Array.from({ length: limit }, () => ({
         id: faker.string.uuid(),
         name: faker.person.fullName(),
         avatar: metadataPhotoFaker(),
         mutualFriendsCount: faker.number.int({ min: 0, max: 150 }),
-        status: "RequestReceived" as const,
+        status: "RequestSent" as const,
       })),
     ],
     nextCursor: faker.string.uuid(),
-  } satisfies GetFriendRequestsResponseSchema);
+  } satisfies GetFriendSentRequestsResponseSchema);
 }
