@@ -1,3 +1,4 @@
+import React, { useRef } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -39,6 +40,21 @@ export function ProfileCoverPhoto({
     })
   );
   const actions = profileActionsQuery.data;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Handle file upload logic here
+      console.log("Selected file:", file);
+    }
+  };
 
   return (
     <section aria-label="Profile cover image">
@@ -74,10 +90,16 @@ export function ProfileCoverPhoto({
                 actions={actions}
                 requiredActions={["ProfileCoverPhotoUpload"]}
               >
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleUploadClick}>
                   <PencilIcon />
                   Upload Cover Photo
                 </DropdownMenuItem>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
               </ActionGuard>
               <ActionGuard
                 actions={actions}
