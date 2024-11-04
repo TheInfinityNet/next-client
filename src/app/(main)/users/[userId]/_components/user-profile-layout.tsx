@@ -2,6 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  CameraIcon,
   ChevronDownIcon,
   ChevronsDownIcon,
   ChevronsUpIcon,
@@ -43,7 +44,7 @@ export function UserProfileLayout({
   userId,
 }: UserProfileLayoutProps) {
   const getUserProfileQuery = useSuspenseQuery(
-    createGetUserProfileQueryOptions({ userId }),
+    createGetUserProfileQueryOptions({ userId })
   );
   const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
     useState<boolean>(true);
@@ -62,16 +63,25 @@ export function UserProfileLayout({
         className="-mt-20 md:-mt-12 mx-2"
       >
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
-          <Avatar className="size-40">
-            <AvatarImage
-              src={userProfile.avatar?.url}
-              className="object-cover"
-              alt={`${userProfile.name} avatar`}
-            />
-            <AvatarFallback>
-              {userProfile.username?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <div className="relative">
+            <Avatar className="size-40">
+              <AvatarImage
+                src={userProfile.avatar?.url}
+                className="object-cover"
+                alt={`${userProfile.name} avatar`}
+              />
+              <AvatarFallback>
+                {userProfile.username?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <Button
+              className="absolute bottom-0 right-0 p-1 rounded-full"
+              size={"icon"}
+            >
+              <CameraIcon className="w-4 h-4" />
+              <span className="sr-only">Change Avatar</span>
+            </Button>
+          </div>
 
           <div className="md:ml-4 mt-4 flex justify-between w-full gap-4 flex-col md:flex-row">
             <div
