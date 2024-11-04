@@ -7,6 +7,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { CameraIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
@@ -25,7 +36,7 @@ export function ProfileCoverPhoto({
   const profileActionsQuery = useQuery(
     createGetProfileActionsQueryOptions({
       profileId,
-    }),
+    })
   );
   const actions = profileActionsQuery.data;
 
@@ -72,9 +83,39 @@ export function ProfileCoverPhoto({
                 actions={actions}
                 requiredActions={["ProfileCoverPhotoDelete"]}
               >
-                <DropdownMenuItem>
-                  <TrashIcon />
-                  Delete Cover Photo
+                <DropdownMenuItem asChild>
+                  <AlertDialog>
+                    <AlertDialogTrigger
+                      asChild
+                      onClick={(event) => {
+                        event.stopPropagation();
+                      }}
+                      onSelect={(event) => {
+                        event.preventDefault();
+                      }}
+                    >
+                      <DropdownMenuItem>
+                        <TrashIcon />
+                        Delete Cover Photo
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </DropdownMenuItem>
               </ActionGuard>
             </DropdownMenuContent>
