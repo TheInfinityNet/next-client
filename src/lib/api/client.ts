@@ -62,6 +62,41 @@ export const apiClient = {
       ...config,
     });
   },
+
+  delete: <TResponse = any, RRequest = any>(
+    url: string,
+    data?: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(url, {
+      data,
+      ...config,
+    });
+  },
+
+  put: <TResponse = any, RRequest = any>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.put<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      data,
+      config,
+    );
+  },
+
+  patch: <TResponse = any, RRequest = any>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.patch<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      data,
+      config,
+    );
+  },
 };
 
 export default client;
