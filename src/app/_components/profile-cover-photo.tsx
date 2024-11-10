@@ -124,7 +124,7 @@ export function ProfileCoverPhoto({
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>
-                          Are you absolutely sure?
+                          Are you sure you want to delete this photo?
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           This action cannot be undone. This will permanently

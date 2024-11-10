@@ -1,5 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   CameraIcon,
@@ -54,6 +55,21 @@ export function UserProfileLayout({
   }, [isShowFriendSuggestion]);
 
   const { data: userProfile } = getUserProfileQuery;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Handle file upload logic here
+      console.log("Selected file:", file);
+    }
+  };
 
   return (
     <Fragment>
@@ -77,10 +93,17 @@ export function UserProfileLayout({
             <Button
               className="absolute bottom-0 right-0 p-1 rounded-full"
               size={"icon"}
+              onClick={handleUploadClick}
             >
               <CameraIcon className="w-4 h-4" />
               <span className="sr-only">Change Avatar</span>
             </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
           </div>
 
           <div className="md:ml-4 mt-4 flex justify-between w-full gap-4 flex-col md:flex-row">
