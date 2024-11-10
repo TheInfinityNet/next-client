@@ -47,8 +47,9 @@ export function UserProfileLayout({
   const getUserProfileQuery = useSuspenseQuery(
     createGetUserProfileQueryOptions({ userId })
   );
-  const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
-    useState<boolean>(true);
+  const [isShowFriendSuggestion, setIsShowFriendSuggestion] = useState<boolean>(
+    true
+  );
 
   useEffect(() => {
     console.log(isShowFriendSuggestion);
@@ -135,13 +136,15 @@ export function UserProfileLayout({
               >
                 <PlusIcon /> Add to Post
               </Button>
-              <Button
-                variant={"secondary"}
-                className="flex-grow sm:flex-none"
-                aria-label="Edit profile"
-              >
-                <PenIcon /> Edit Profile
-              </Button>
+              <Link href="/edit-profile" passHref>
+                <Button
+                  variant={"secondary"}
+                  className="flex-grow sm:flex-none"
+                  aria-label="Edit profile"
+                >
+                  <PenIcon /> Edit Profile
+                </Button>
+              </Link>
               <Button
                 variant={"secondary"}
                 className="w-full sm:w-fit"
