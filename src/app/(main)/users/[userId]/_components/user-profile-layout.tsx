@@ -112,7 +112,7 @@ export function UserProfileLayout({
               >
                 <PlusIcon /> Add to Post
               </Button>
-              <Link href="/edit-profile" passHref>
+              <Link href={`/users/${userId}/edit-profile#edit-form`} passHref>
                 <Button
                   variant={"secondary"}
                   className="flex-grow sm:flex-none"

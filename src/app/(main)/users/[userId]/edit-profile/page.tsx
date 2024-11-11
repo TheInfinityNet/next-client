@@ -1,11 +1,12 @@
-import EditUserProfileForm from "@/components/EditUserProfileForm";
+import EditUserProfileForm from "../_components/edit-user-profile-form";
 
 type EditUserProfileFormProps = {
-  children: React.ReactNode;
-  params: Promise<{ userId: string }>;
+  params: { userId: string };
 };
 
-export default function EditProfilePage({ params }: EditUserProfileFormProps) {
-  const { userId } = await params;
+export default async function EditProfilePage({
+  params,
+}: EditUserProfileFormProps) {
+  const { userId } = params;
   return <EditUserProfileForm userId={userId} />;
 }

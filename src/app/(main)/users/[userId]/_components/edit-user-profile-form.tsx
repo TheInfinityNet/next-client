@@ -85,7 +85,7 @@ export default function EditUserProfileForm({
   });
 
   return (
-    <Card className="w-full mx-2 space-y-6">
+    <Card className="w-full mx-2 space-y-6" id="edit-form">
       <CardHeader>
         <CardTitle>Edit Profile</CardTitle>
         <CardDescription>
