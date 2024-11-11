@@ -34,7 +34,7 @@ export default function Page() {
       (acc, page) => {
         return [...acc, ...page.items];
       },
-      [],
+      []
     );
   }, [data]);
 
@@ -57,7 +57,7 @@ export default function Page() {
       <div
         key={friendsSuggestion?.length}
         ref={lastElementRef}
-        className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
+          
       >
         <UserFriendCardLoading />
       </div>
