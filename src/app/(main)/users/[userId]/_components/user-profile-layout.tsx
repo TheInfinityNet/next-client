@@ -1,9 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useRef, Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  CameraIcon,
   ChevronDownIcon,
   ChevronsDownIcon,
   ChevronsUpIcon,
@@ -20,6 +18,9 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+
+import { Fragment, useEffect, useState } from "react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,44 +33,26 @@ import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
 import { ProfileActionsDropdown } from "./profile-actions-dropdown";
-import UserProfileAvatar from "./user-profile-avatar";
 
 type UserProfileLayoutProps = {
   userId: string;
   children: React.ReactNode;
 };
-
 export function UserProfileLayout({
   children,
   userId,
 }: UserProfileLayoutProps) {
   const getUserProfileQuery = useSuspenseQuery(
-    createGetUserProfileQueryOptions({ userId })
+    createGetUserProfileQueryOptions({ userId }),
   );
-  const [isShowFriendSuggestion, setIsShowFriendSuggestion] = useState<boolean>(
-    true
-  );
+  const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
+    useState<boolean>(true);
 
   useEffect(() => {
     console.log(isShowFriendSuggestion);
   }, [isShowFriendSuggestion]);
 
   const { data: userProfile } = getUserProfileQuery;
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Handle file upload logic here
-      console.log("Selected file:", file);
-    }
-  };
 
   return (
     <Fragment>
@@ -79,11 +62,16 @@ export function UserProfileLayout({
         className="-mt-20 md:-mt-12 mx-2"
       >
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
-          <UserProfileAvatar
-            userProfile={userProfile}
-            handleUploadClick={handleUploadClick}
-            handleFileChange={handleFileChange}
-          />
+          <Avatar className="size-40">
+            <AvatarImage
+              src={userProfile.avatar?.url}
+              className="object-cover"
+              alt={`${userProfile.name} avatar`}
+            />
+            <AvatarFallback>
+              {userProfile.username?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
 
           <div className="md:ml-4 mt-4 flex justify-between w-full gap-4 flex-col md:flex-row">
             <div
@@ -104,6 +92,8 @@ export function UserProfileLayout({
               </div>
               <ProfileFriendsSummaryPreview userId={userId} />
             </div>
+            {/* TODO: Refactor to ProfileActionButtons({userId}) */}
+            {/* API: /profile/users/:userId/actions */}
             <div className="flex flex-wrap gap-2 justify-center md:justify-end items-end mt-auto">
               <Button
                 variant={"default"}
@@ -112,15 +102,13 @@ export function UserProfileLayout({
               >
                 <PlusIcon /> Add to Post
               </Button>
-              <Link href={`/users/${userId}/edit-profile#edit-form`} passHref>
-                <Button
-                  variant={"secondary"}
-                  className="flex-grow sm:flex-none"
-                  aria-label="Edit profile"
-                >
-                  <PenIcon /> Edit Profile
-                </Button>
-              </Link>
+              <Button
+                variant={"secondary"}
+                className="flex-grow sm:flex-none"
+                aria-label="Edit profile"
+              >
+                <PenIcon /> Edit Profile
+              </Button>
               <Button
                 variant={"secondary"}
                 className="w-full sm:w-fit"
@@ -148,6 +136,8 @@ export function UserProfileLayout({
         <ProfileFriendsSuggestionCarousel userId={userId} />
       ) : null}
 
+      {/* TODO: Refactor to ProfileNavigation({userId}) */}
+      {/* API: /profile/users/:userId/navigation */}
       <section className="mt-2 mx-2" aria-label="Profile navigation">
         <Card>
           <CardContent className="py-2 px-1 mx-1 overflow-x-scroll">

@@ -1,4 +1,3 @@
-import React, { useRef } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -8,17 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { CameraIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
@@ -37,24 +25,9 @@ export function ProfileCoverPhoto({
   const profileActionsQuery = useQuery(
     createGetProfileActionsQueryOptions({
       profileId,
-    })
+    }),
   );
   const actions = profileActionsQuery.data;
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleUploadClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Handle file upload logic here
-      console.log("Selected file:", file);
-    }
-  };
 
   return (
     <section aria-label="Profile cover image">
@@ -90,54 +63,18 @@ export function ProfileCoverPhoto({
                 actions={actions}
                 requiredActions={["ProfileCoverPhotoUpload"]}
               >
-                <DropdownMenuItem onClick={handleUploadClick}>
+                <DropdownMenuItem>
                   <PencilIcon />
                   Upload Cover Photo
                 </DropdownMenuItem>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
               </ActionGuard>
               <ActionGuard
                 actions={actions}
                 requiredActions={["ProfileCoverPhotoDelete"]}
               >
-                <DropdownMenuItem asChild>
-                  <AlertDialog>
-                    <AlertDialogTrigger
-                      asChild
-                      onClick={(event) => {
-                        event.stopPropagation();
-                      }}
-                      onSelect={(event) => {
-                        event.preventDefault();
-                      }}
-                    >
-                      <DropdownMenuItem>
-                        <TrashIcon />
-                        Delete Cover Photo
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you sure you want to delete this photo?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                <DropdownMenuItem>
+                  <TrashIcon />
+                  Delete Cover Photo
                 </DropdownMenuItem>
               </ActionGuard>
             </DropdownMenuContent>
