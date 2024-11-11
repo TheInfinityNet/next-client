@@ -1,24 +1,26 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import {
   EditUserProfileSchema,
   EditUserProfileResponseSchema,
+  EditUserProfileErrorResponse,
 } from "@/lib/api/schemas/edit-user-profile.schema";
 import { editProfileApi } from "@/lib/api/apis/edit-profile.api";
+import { getQueryClient } from "@/lib/query-client";
 
 export function useEditProfileMutation() {
-  const client = useQueryClient();
+  const client = getQueryClient();
 
   return useMutation<
     EditUserProfileResponseSchema,
-    Error,
+    EditUserProfileErrorResponse,
     EditUserProfileSchema
   >({
-    mutationKey: ["editProfile"],
+    mutationKey: ["edit-profile"],
     mutationFn: (data) => editProfileApi(data),
     onSuccess(data) {
       client.invalidateQueries({
-        queryKey: ["current-user-profile"],
+        queryKey: ["user-profile", { userId: data.user.id }],
       });
     },
     onError: (error) => {

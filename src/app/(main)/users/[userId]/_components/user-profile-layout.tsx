@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useRef } from "react";
+import React, { useRef, Fragment, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   CameraIcon,
@@ -20,9 +20,6 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-
-import { Fragment, useEffect, useState } from "react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,11 +32,13 @@ import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
 import { ProfileActionsDropdown } from "./profile-actions-dropdown";
+import UserProfileAvatar from "./user-profile-avatar";
 
 type UserProfileLayoutProps = {
   userId: string;
   children: React.ReactNode;
 };
+
 export function UserProfileLayout({
   children,
   userId,
@@ -80,32 +79,11 @@ export function UserProfileLayout({
         className="-mt-20 md:-mt-12 mx-2"
       >
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
-          <div className="relative">
-            <Avatar className="size-40">
-              <AvatarImage
-                src={userProfile.avatar?.url}
-                className="object-cover"
-                alt={`${userProfile.name} avatar`}
-              />
-              <AvatarFallback>
-                {userProfile.username?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <Button
-              className="absolute bottom-0 right-0 p-1 rounded-full"
-              size={"icon"}
-              onClick={handleUploadClick}
-            >
-              <CameraIcon className="w-4 h-4" />
-              <span className="sr-only">Change Avatar</span>
-            </Button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: "none" }}
-              onChange={handleFileChange}
-            />
-          </div>
+          <UserProfileAvatar
+            userProfile={userProfile}
+            handleUploadClick={handleUploadClick}
+            handleFileChange={handleFileChange}
+          />
 
           <div className="md:ml-4 mt-4 flex justify-between w-full gap-4 flex-col md:flex-row">
             <div
@@ -126,8 +104,6 @@ export function UserProfileLayout({
               </div>
               <ProfileFriendsSummaryPreview userId={userId} />
             </div>
-            {/* TODO: Refactor to ProfileActionButtons({userId}) */}
-            {/* API: /profile/users/:userId/actions */}
             <div className="flex flex-wrap gap-2 justify-center md:justify-end items-end mt-auto">
               <Button
                 variant={"default"}
@@ -172,8 +148,6 @@ export function UserProfileLayout({
         <ProfileFriendsSuggestionCarousel userId={userId} />
       ) : null}
 
-      {/* TODO: Refactor to ProfileNavigation({userId}) */}
-      {/* API: /profile/users/:userId/navigation */}
       <section className="mt-2 mx-2" aria-label="Profile navigation">
         <Card>
           <CardContent className="py-2 px-1 mx-1 overflow-x-scroll">
