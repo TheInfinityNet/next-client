@@ -57,10 +57,7 @@ export function UserProfileLayout({
   return (
     <Fragment>
       <ProfileCoverPhoto profileId={userId} url={userProfile.cover?.url} />
-      <section
-        aria-label="Profile information"
-        className="-mt-20 md:-mt-12 mx-2"
-      >
+      <section aria-label="Profile information" className="-mt-20 md:-mt-12 mx-2">
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
           <Avatar className="size-40">
             <AvatarImage
