@@ -83,7 +83,7 @@ export const postSchema = z.discriminatedUnion("type", [
 
 export const basePostRequestSchema = basePostSchema
   .omit({
-    id: true,
+    // id: true,
     ownerId: true,
     createdAt: true,
     updatedAt: true,
@@ -183,14 +183,35 @@ export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
   ),
 });
 
-export const postResponseSchema = z.discriminatedUnion("type", [
-  textPostResponseSchema,
-  photoPostResponseSchema,
-  videoPostResponseSchema,
-  audioPostResponseSchema,
-  filePostResponseSchema,
-  sharePostResponseSchema,
-  multiMediaPostResponseSchema,
-]);
+export const postResponseErrorSchema = basePostSchema
+.omit({
+  id: true,
+  type: true,
+  ownerId: true,
+  audiance: true,
+  content: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+})
+.extend({
+  message: z.string(),
+  type: z.enum(["ResourceNotFound", "Forbidden"]),
+  });
+
+export const basePostResponseSchema = basePostSchema
+  .omit({
+    ownerId: true,
+  })
+  .extend({
+    owner: baseProfileResponseSchema.pick({
+      id: true,
+      type: true,
+      avatar: true,
+      name: true,
+    }),
+    content: textContentResponseSchema.optional(),
+  });
 
 export type PostResponseSchema = z.infer<typeof postResponseSchema> 
+export type PostRequestSchema = z.infer<typeof postRequestSchema> 

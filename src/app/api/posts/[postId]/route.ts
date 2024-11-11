@@ -1,5 +1,5 @@
 import {
-  PostRequestSchema, PostResponseSchema
+  PostRequestSchema, PostResponseSchema, PostResponseErrorSchema,
 } from "@/lib/api/schemas/post.schema";
 import { HttpStatusCode } from "axios";
 
@@ -7,28 +7,29 @@ export async function GET(
   request: Request,
   { params }: { params: PostRequestSchema },
 ) {
-  if (params. === "00000000-0000-0000-0000-000000000001") {
+  if (params.id === "00000000-0000-0000-0000-000000000001") {
     return Response.json(
       {
         message: "Forbidden",
         type: "Forbidden",
-      } satisfies GetPostErrorResponseSchema,
+      } satisfies PostResponseErrorSchema,
       { status: HttpStatusCode.Forbidden },
     );
-  } else if (params.postId === "00000000-0000-0000-0000-000000000002") {
+  } else if (params.id === "00000000-0000-0000-0000-000000000002") {
     return Response.json(
       {
         id: "00000000-0000-0000-0000-000000000002",
-        title: "Sample Post",
-        content: "This is a sample post content.",
-        author: {
-          id: "00000000-0000-0000-0000-000000000003",
-          name: "Author Name",
-          avatar: "https://example.com/avatar.jpg",
+        type: "Text",
+        owner: {
+          id: "00000000-0000-0000-0000-000000000001",
+          type: "User",
+          avatar: "https://example.com/avatar.png",
+          name: "John Doe",
         },
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      } satisfies GetPostResponseSchema,
+        content: {
+          text: "Hello World",
+        },
+      } satisfies PostResponseSchema,
       { status: HttpStatusCode.Ok },
     );
   }
@@ -36,7 +37,7 @@ export async function GET(
     {
       message: "Post not found",
       type: "ResourceNotFound",
-    } satisfies GetPostErrorResponseSchema,
+    } satisfies PostResponseErrorSchema,
     { status: HttpStatusCode.NotFound },
   );
 }
