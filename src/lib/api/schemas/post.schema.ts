@@ -161,3 +161,36 @@ export const videoPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("Video"),
   video: videoMetadataResponseSchema,
 });
+export const audioPostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("Audio"),
+  audioId: z.string().uuid(),
+});
+export const filePostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("File"),
+  fileId: z.string().uuid(),
+});
+export const sharePostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("Share"),
+  shareId: z.string().uuid(),
+});
+export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("MultiMedia"),
+  aggregates: z.array(
+    z.discriminatedUnion("type", [
+      photoPostResponseSchema,
+      videoPostResponseSchema,
+    ]),
+  ),
+});
+
+export const postResponseSchema = z.discriminatedUnion("type", [
+  textPostResponseSchema,
+  photoPostResponseSchema,
+  videoPostResponseSchema,
+  audioPostResponseSchema,
+  filePostResponseSchema,
+  sharePostResponseSchema,
+  multiMediaPostResponseSchema,
+]);
+
+export type PostResponseSchema = z.infer<typeof postResponseSchema> 
