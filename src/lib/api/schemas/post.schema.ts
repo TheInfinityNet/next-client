@@ -83,7 +83,7 @@ export const postSchema = z.discriminatedUnion("type", [
 
 export const basePostRequestSchema = basePostSchema
   .omit({
-    id: true,
+    // id: true,
     ownerId: true,
     createdAt: true,
     updatedAt: true,
@@ -161,3 +161,57 @@ export const videoPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("Video"),
   video: videoMetadataResponseSchema,
 });
+export const audioPostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("Audio"),
+  audioId: z.string().uuid(),
+});
+export const filePostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("File"),
+  fileId: z.string().uuid(),
+});
+export const sharePostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("Share"),
+  shareId: z.string().uuid(),
+});
+export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("MultiMedia"),
+  aggregates: z.array(
+    z.discriminatedUnion("type", [
+      photoPostResponseSchema,
+      videoPostResponseSchema,
+    ]),
+  ),
+});
+
+export const postResponseErrorSchema = basePostSchema
+.omit({
+  id: true,
+  type: true,
+  ownerId: true,
+  audiance: true,
+  content: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+})
+.extend({
+  message: z.string(),
+  type: z.enum(["ResourceNotFound", "Forbidden"]),
+  });
+
+export const basePostResponseSchema = basePostSchema
+  .omit({
+    ownerId: true,
+  })
+  .extend({
+    owner: baseProfileResponseSchema.pick({
+      id: true,
+      type: true,
+      avatar: true,
+      name: true,
+    }),
+    content: textContentResponseSchema.optional(),
+  });
+
+export type PostResponseSchema = z.infer<typeof postResponseSchema> 
+export type PostRequestSchema = z.infer<typeof postRequestSchema> 
