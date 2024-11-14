@@ -8,6 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { FriendStatusSchema } from "@/lib/api/schemas/friend-status.schema";
+import { UserFriendButton } from "./user-friend-button";
 
 type UserFriendCardProps = {
   userId: string;
@@ -123,7 +124,9 @@ export function UserFriendCard({
           <span>{formatMutualFriend(totalMutualFriend)}</span>
         </div>
       </CardContent>
-      <CardFooter className="p-2 grid gap-2">{renderStatusButton()}</CardFooter>
+      <CardFooter className="p-2 grid gap-2">
+        <UserFriendButton status={status} userId={userId} />
+      </CardFooter>
     </Card>
   );
 }

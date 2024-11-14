@@ -79,10 +79,22 @@ export const apiClient = {
     data?: RRequest,
     config?: AxiosRequestConfig<RRequest>
   ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(url, {
+    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      { data, ...config }
+    );
+  },
+
+  patch: <TResponse = any, RRequest = any>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.patch<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
       data,
-      ...config,
-    });
+      config
+    );
   },
 };
 
