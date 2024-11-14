@@ -1,4 +1,3 @@
-import { useAccessToken, useRefreshToken } from "@/hooks/use-token-store";
 import axios, { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
 
 const client = axios.create({
@@ -15,7 +14,7 @@ client.interceptors.request.use(
   null,
   {
     runWhen: (request) => !!!request.headers["No-Auth"],
-  },
+  }
 );
 
 client.interceptors.response.use(
@@ -36,26 +35,26 @@ client.interceptors.response.use(
       type: "UnknownError",
       message: "An unknown error occurred",
     };
-  },
+  }
 );
 
 export const apiClient = {
   post: <TResponse = any, RRequest = any>(
     url: string,
     data: RRequest,
-    config?: AxiosRequestConfig<RRequest>,
+    config?: AxiosRequestConfig<RRequest>
   ): Promise<AxiosResponse<TResponse, RRequest>> => {
     return client.post<TResponse, AxiosResponse<TResponse>, RRequest>(
       url,
       data,
-      config,
+      config
     );
   },
 
   get: <TResponse = unknown, TQueryParams = unknown>(
     url: string,
     query?: TQueryParams,
-    config?: AxiosRequestConfig<TQueryParams>,
+    config?: AxiosRequestConfig<TQueryParams>
   ): Promise<AxiosResponse<TResponse, TQueryParams>> => {
     return client.get<TResponse, AxiosResponse<TResponse, TQueryParams>>(url, {
       params: query,
@@ -63,38 +62,38 @@ export const apiClient = {
     });
   },
 
-  delete: <TResponse = any, RRequest = any>(
-    url: string,
-    data?: RRequest,
-    config?: AxiosRequestConfig<RRequest>,
-  ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(url, {
-      data,
-      ...config,
-    });
-  },
-
   put: <TResponse = any, RRequest = any>(
     url: string,
     data: RRequest,
-    config?: AxiosRequestConfig<RRequest>,
+    config?: AxiosRequestConfig<RRequest>
   ): Promise<AxiosResponse<TResponse, RRequest>> => {
     return client.put<TResponse, AxiosResponse<TResponse>, RRequest>(
       url,
       data,
-      config,
+      config
+    );
+  },
+
+  delete: <TResponse = any, RRequest = any>(
+    url: string,
+    data?: RRequest,
+    config?: AxiosRequestConfig<RRequest>
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      { data, ...config }
     );
   },
 
   patch: <TResponse = any, RRequest = any>(
     url: string,
     data: RRequest,
-    config?: AxiosRequestConfig<RRequest>,
+    config?: AxiosRequestConfig<RRequest>
   ): Promise<AxiosResponse<TResponse, RRequest>> => {
     return client.patch<TResponse, AxiosResponse<TResponse>, RRequest>(
       url,
       data,
-      config,
+      config
     );
   },
 };
