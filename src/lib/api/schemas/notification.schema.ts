@@ -1,20 +1,24 @@
 import { z } from "zod";
 import { photoMetadataResponseSchema } from "./metadata.schema";
 
+export const notificationTypeSchema = z.enum([
+  "TaggedInPost",
+  "FriendInvitation",
+  "NewFollowerPost",
+  "NewGroupPost",
+  "PostReaction",
+  "CommentReaction",
+  "ReplyToPost",
+  "ReplyToComment",
+  "TaggedInComment",
+  "Miscellaneous",
+]);
+
+export type NotificationTypeSchema = z.infer<typeof notificationTypeSchema>;
+
 export const notificationSchema = z.object({
   id: z.string().uuid(),
-  type: z.enum([
-    "TaggedInPost",
-    "FriendInvitation",
-    "NewFollowerPost",
-    "NewGroupPost",
-    "PostReaction",
-    "CommentReaction",
-    "ReplyToPost",
-    "ReplyToComment",
-    "TaggedInComment",
-    "Miscellaneous",
-  ]),
+  type: notificationTypeSchema,
   thumbnailId: z.string().uuid().optional(),
   title: z.string(),
   content: z.string(),

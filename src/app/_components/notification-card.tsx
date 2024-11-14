@@ -25,10 +25,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NotificationButtonMarkAsReadUnread } from "./notification-button-mark-as-read-unread";
 import { NotificationButtonRemove } from "./notification-button-remove";
+import { NotificationTypeSchema } from "@/lib/api/schemas/notification.schema";
+import { useState } from "react";
 
 type NotificationCardProps = {
   id: string;
-  type: string;
+  type: NotificationTypeSchema;
   thumbnail?: string;
   title: string;
   content: string;
@@ -42,37 +44,55 @@ export function NotificationCard({
   thumbnail,
   title,
   content,
-  isRead,
+  isRead: initialIsRead,
   permalink,
 }: NotificationCardProps) {
+  const [isRead, setIsRead] = useState<boolean>(initialIsRead);
+
   const renderNotificationType = () => {
-    if (type === "TaggedInPost" || type === "TaggedInComment") {
-      return <Tag />;
-    } else if (type === "NewFollowerPost" || type === "NewGroupPost") {
-      return <FileText />;
-    } else if (type === "FriendInvitation") {
-      return <UserRound />;
-    } else if (type === "PostReaction" || type === "CommentReaction") {
-      return <SmilePlus />;
-    } else if (type === "ReplyToPost" || type === "ReplyToComment") {
-      return <MessageCircle />;
-    } else if (type === "Miscellaneous") {
-      return <Megaphone />;
-    } else {
-      return null;
+    switch (type) {
+      case "TaggedInPost":
+      case "TaggedInComment":
+        return <Tag />;
+        break;
+      case "NewFollowerPost":
+      case "NewGroupPost":
+        return <FileText />;
+        break;
+      case "FriendInvitation":
+        return <UserRound />;
+        break;
+      case "PostReaction":
+      case "CommentReaction":
+        return <SmilePlus />;
+        break;
+      case "ReplyToPost":
+      case "ReplyToComment":
+        return <MessageCircle />;
+        break;
+      case "Miscellaneous":
+        return <Megaphone />;
+        break;
+      default:
+        return null;
     }
   };
 
+  const handleIsReadChange = (newIsRead: boolean) => {
+    setIsRead(newIsRead);
+  };
+
   const renderNotificationStatus = () => {
-    if (isRead === false) {
-      return (
-        <Badge
-          variant={"destructive"}
-          className="absolute top-0 right-0 size-2 p-0"
-        ></Badge>
-      );
-    } else {
-      return null;
+    switch (isRead) {
+      case false:
+        return (
+          <Badge
+            variant={"destructive"}
+            className="absolute top-0 right-0 size-2 p-0"
+          ></Badge>
+        );
+      default:
+        return null;
     }
   };
 
@@ -116,10 +136,14 @@ export function NotificationCard({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild className="w-full flex justify-start">
-                <NotificationButtonMarkAsReadUnread id={id} isRead={isRead} />
+                <NotificationButtonMarkAsReadUnread
+                  notificationId={id}
+                  isRead={isRead}
+                  onIsReadChange={handleIsReadChange}
+                />
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="w-full flex justify-start">
-                <NotificationButtonRemove />
+                <NotificationButtonRemove notificationId={id} />
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

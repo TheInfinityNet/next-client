@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
         content: faker.lorem.sentence(),
         isRead: faker.datatype.boolean(),
         permalink: faker.internet.url(),
-        userId: faker.string.uuid(),
         createdAt: faker.date.past().toISOString(),
         updatedAt: faker.date.recent().toISOString(),
       },
