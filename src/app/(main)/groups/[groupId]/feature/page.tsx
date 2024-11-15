@@ -15,7 +15,7 @@ import { FileIcon, Lock, Eye, ThumbsUpIcon, MessageCircleIcon, ShareIcon, SmileI
 
 export default function Component() {
     return (
-        <div className="flex gap-4 mx-12">
+        <div className="flex gap-4 p-6 mx-6">
             {/* Cột trái - Bài đăng */}
             <div className="flex-1">
                 <Card>

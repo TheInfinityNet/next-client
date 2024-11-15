@@ -1,17 +1,17 @@
 import { AxiosRequestConfig } from "axios";
 import { apiClient } from "../client";
 import {
-  GetGroupProfileParams,
-  GetGroupProfileQueries,
-  GetGroupProfileResponse,
+  GetGroupProfileParamsSchema,
+  GetGroupProfileQueriesSchema,
+  GetGroupProfileResponseSchema,
 } from "../schemas/get-group-profile.schema";
 
 export async function getGroupProfileApi(
-  params: GetGroupProfileParams,
-  query?: GetGroupProfileQueries,
-  config?: AxiosRequestConfig<GetGroupProfileQueries>,
-): Promise<GetGroupProfileResponse> {
-  const response = await apiClient.get<GetGroupProfileResponse, GetGroupProfileQueries>(
+  params: GetGroupProfileParamsSchema,
+  query?: GetGroupProfileQueriesSchema,
+  config?: AxiosRequestConfig<GetGroupProfileQueriesSchema>,
+): Promise<GetGroupProfileResponseSchema> {
+  const response = await apiClient.get<GetGroupProfileResponseSchema, GetGroupProfileQueriesSchema>(
     `/groups/${params.groupId}`,
     query,
     { ...config }

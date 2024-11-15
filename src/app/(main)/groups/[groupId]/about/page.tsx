@@ -17,7 +17,7 @@ export default function GroupAbout() {
   if (error) return <p>Error loading group data</p>;
 
   return (
-    <div className="space-y-6 mx-auto max-w-[500px]">
+    <div className="p-6 mx-6">
       <Card>
         <CardHeader>
           <span className="font-bold">About this group</span>
