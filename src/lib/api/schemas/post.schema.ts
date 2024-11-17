@@ -16,6 +16,11 @@ import {
   videoMetadataResponseSchema,
 } from "./metadata.schema";
 import { baseProfileResponseSchema } from "./profile.schema";
+import { commentResponseSchema } from "./comment.schema";
+import {
+  postReactionCountsResponseSchema,
+  postReactionTypeSchema,
+} from "./post-reaction.schema";
 
 export const basePostSchema = z.object({
   id: z.string().uuid(),
@@ -144,6 +149,9 @@ export const basePostResponseSchema = basePostSchema
   })
   .extend({
     audiance: basePostAudienceSchema,
+    reactionCounts: postReactionCountsResponseSchema.optional(),
+    reaction: postReactionTypeSchema.optional(),
+    popularComments: z.array(commentResponseSchema).optional(),
     owner: baseProfileResponseSchema.pick({
       id: true,
       type: true,
