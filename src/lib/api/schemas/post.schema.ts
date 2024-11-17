@@ -9,11 +9,18 @@ import {
   textContentSchema,
 } from "./text-content.schema";
 import {
+  audioMetadataResponseSchema,
+  fileMetadataResponseSchema,
   photoMetadataResponseSchema,
   photoMetadataSchema,
   videoMetadataResponseSchema,
 } from "./metadata.schema";
 import { baseProfileResponseSchema } from "./profile.schema";
+import { commentResponseSchema } from "./comment.schema";
+import {
+  postReactionCountsResponseSchema,
+  postReactionTypeSchema,
+} from "./post-reaction.schema";
 
 export const basePostSchema = z.object({
   id: z.string().uuid(),
@@ -141,14 +148,18 @@ export const basePostResponseSchema = basePostSchema
     ownerId: true,
   })
   .extend({
+    audiance: basePostAudienceSchema,
+    reactionCounts: postReactionCountsResponseSchema.optional(),
+    reaction: postReactionTypeSchema.optional(),
+    popularComments: z.array(commentResponseSchema).optional(),
     owner: baseProfileResponseSchema.pick({
       id: true,
       type: true,
       avatar: true,
       name: true,
     }),
-    content: textContentResponseSchema.optional(),
   });
+
 export const textPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("Text"),
   content: textContentResponseSchema,
@@ -163,15 +174,11 @@ export const videoPostResponseSchema = basePostResponseSchema.extend({
 });
 export const audioPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("Audio"),
-  audioId: z.string().uuid(),
+  audio: audioMetadataResponseSchema,
 });
 export const filePostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("File"),
-  fileId: z.string().uuid(),
-});
-export const sharePostResponseSchema = basePostResponseSchema.extend({
-  type: z.literal("Share"),
-  shareId: z.string().uuid(),
+  file: fileMetadataResponseSchema,
 });
 export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("MultiMedia"),
@@ -182,36 +189,27 @@ export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
     ]),
   ),
 });
+export const sharePostResponseSchema = basePostResponseSchema.extend({
+  type: z.literal("Share"),
+  share: z.discriminatedUnion("type", [
+    textPostResponseSchema,
+    photoPostResponseSchema,
+    videoPostResponseSchema,
+    audioPostResponseSchema,
+    filePostResponseSchema,
+    multiMediaPostResponseSchema,
+  ]),
+});
 
-export const postResponseErrorSchema = basePostSchema
-.omit({
-  id: true,
-  type: true,
-  ownerId: true,
-  audiance: true,
-  content: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-})
-.extend({
-  message: z.string(),
-  type: z.enum(["ResourceNotFound", "Forbidden"]),
-  });
+export const postResponseSchema = z.discriminatedUnion("type", [
+  textPostResponseSchema,
+  photoPostResponseSchema,
+  videoPostResponseSchema,
+  audioPostResponseSchema,
+  filePostResponseSchema,
+  sharePostResponseSchema,
+  multiMediaPostResponseSchema,
+]);
 
-export const basePostResponseSchema = basePostSchema
-  .omit({
-    ownerId: true,
-  })
-  .extend({
-    owner: baseProfileResponseSchema.pick({
-      id: true,
-      type: true,
-      avatar: true,
-      name: true,
-    }),
-    content: textContentResponseSchema.optional(),
-  });
-
-export type PostResponseSchema = z.infer<typeof postResponseSchema> 
-export type PostRequestSchema = z.infer<typeof postRequestSchema> 
+export type PostResponseSchema = z.infer<typeof postResponseSchema>;
+export type PostRequestSchema = z.infer<typeof postRequestSchema>;
