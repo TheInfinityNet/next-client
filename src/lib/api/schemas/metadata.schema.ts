@@ -56,19 +56,24 @@ export const baseMetadataResponseSchema = baseMetadataSchema
     ownerId: true,
   })
   .extend({
-    owner: baseProfileSchema
-      .pick({
-        id: true,
-        type: true,
-      })
-      .optional(),
+    owner: z.lazy(() =>
+      baseProfileSchema
+        .pick({
+          id: true,
+          type: true,
+        })
+        .optional(),
+    ),
   });
 export const photoMetadataResponseSchema = baseMetadataResponseSchema.merge(
   baseMetadataPhotoSpecificSchema,
 );
-export const videoMetadataResponseSchema = baseMetadataResponseSchema.merge(
-  baseMetadataVideoSpecificSchema,
-);
+export const videoMetadataResponseSchema = baseMetadataResponseSchema
+  .merge(baseMetadataVideoSpecificSchema)
+  .omit({ thumbnailId: true })
+  .extend({
+    thumbnail: z.lazy(() => photoMetadataResponseSchema).optional(),
+  });
 export const audioMetadataResponseSchema = baseMetadataResponseSchema.merge(
   baseMetadataAudioSpecificSchema,
 );
@@ -104,3 +109,13 @@ export const metadataTemporarilyResponseSchema = z.discriminatedUnion("type", [
 export type MetadataPhotoResponseSchema = z.infer<
   typeof photoMetadataResponseSchema
 >;
+export type MetadataVideoResponseSchema = z.infer<
+  typeof videoMetadataResponseSchema
+>;
+export type MetadataAudioResponseSchema = z.infer<
+  typeof audioMetadataResponseSchema
+>;
+export type MetadataFileResponseSchema = z.infer<
+  typeof fileMetadataResponseSchema
+>;
+export type MetadataResponseSchema = z.infer<typeof metadataResponseSchema>;

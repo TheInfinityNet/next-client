@@ -1,8 +1,6 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { createGetFriendsSuggestionQueryOptions } from "@/hooks/queries/get-friends-suggestion.query";
 import { useCallback, useMemo, useRef } from "react";
-import { GetFriendsSuggestionResponseSchema } from "@/lib/api/schemas/get-friends-suggestion.schema";
 import { UserFriendCard } from "@/app/_components/user-friend-card";
 import { UserFriendCardLoading } from "../../users/[userId]/_components/user-friend-card-loading";
 import { GetFriendListResponseSchema } from "@/lib/api/schemas/get-friend-list.schema";

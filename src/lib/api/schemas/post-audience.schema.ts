@@ -2,13 +2,13 @@ import { z } from "zod";
 import { baseProfileSchema } from "./profile.schema";
 
 export const basePostAudienceSchema = z.object({
-  type: z.enum(["Public", "Private", "OnlyMe", "Include", "Exclude", "Custom"]),
+  type: z.enum(["Public", "Friend", "OnlyMe", "Include", "Exclude", "Custom"]),
 });
 export const postAudiencePublicSchema = basePostAudienceSchema.extend({
   type: z.literal("Public"),
 });
-export const postAudiencePrivateSchema = basePostAudienceSchema.extend({
-  type: z.literal("Private"),
+export const postAudienceFriendSchema = basePostAudienceSchema.extend({
+  type: z.literal("Friend"),
 });
 export const postAudienceOnlyMeSchema = basePostAudienceSchema.extend({
   type: z.literal("OnlyMe"),
@@ -31,7 +31,7 @@ export const postAudienceCustomSchema = postAudienceIncludeSchema
 
 export const postAudienceSchema = z.discriminatedUnion("type", [
   postAudiencePublicSchema,
-  postAudiencePrivateSchema,
+  postAudienceFriendSchema,
   postAudienceOnlyMeSchema,
   postAudienceIncludeSchema,
   postAudienceExcludeSchema,
@@ -39,7 +39,7 @@ export const postAudienceSchema = z.discriminatedUnion("type", [
 ]);
 
 export const postAudiencePublicRequestSchema = postAudiencePublicSchema;
-export const postAudiencePrivateRequestSchema = postAudiencePrivateSchema;
+export const postAudienceFriendRequestSchema = postAudienceFriendSchema;
 export const postAudienceOnlyMeRequestSchema = postAudienceOnlyMeSchema;
 export const postAudienceIncludeRequestSchema = postAudienceIncludeSchema.omit({
   include: true,
@@ -53,7 +53,7 @@ export const postAudienceCustomRequestSchema = postAudienceCustomSchema.omit({
 });
 export const postAudienceRequestSchema = z.discriminatedUnion("type", [
   postAudiencePublicRequestSchema,
-  postAudiencePrivateRequestSchema,
+  postAudienceFriendRequestSchema,
   postAudienceOnlyMeRequestSchema,
   postAudienceIncludeRequestSchema,
   postAudienceExcludeRequestSchema,
@@ -61,7 +61,7 @@ export const postAudienceRequestSchema = z.discriminatedUnion("type", [
 ]);
 
 export const postAudiencePublicResponseSchema = postAudiencePublicSchema;
-export const postAudiencePrivateResponseSchema = postAudiencePrivateSchema;
+export const postAudienceFriendResponseSchema = postAudienceFriendSchema;
 export const postAudienceOnlyMeResponseSchema = postAudienceOnlyMeSchema;
 export const postAudienceIncludeResponseSchema = postAudienceIncludeSchema.omit(
   {
@@ -80,7 +80,7 @@ export const postAudienceCustomResponseSchema = postAudienceCustomSchema.omit({
 
 export const postAudienceResponseSchema = z.discriminatedUnion("type", [
   postAudiencePublicResponseSchema,
-  postAudiencePrivateResponseSchema,
+  postAudienceFriendResponseSchema,
   postAudienceOnlyMeResponseSchema,
   postAudienceIncludeResponseSchema,
   postAudienceExcludeResponseSchema,
