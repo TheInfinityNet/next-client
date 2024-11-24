@@ -30,7 +30,7 @@ import { PostReactionButton } from "./post-reaction-button";
 import { createContext, useContext, useState } from "react";
 import { PostReactionTypeSchema } from "@/lib/api/schemas/post-reaction.schema";
 import { PostReactionCounts } from "./post-reaction-counts";
-import CommentList from "./comment-list";
+import { CommentList } from "./comment-list";
 
 type PostCardProps = {
   post: PostResponseSchema;
@@ -236,7 +236,7 @@ export function PostCard({ post }: PostCardProps) {
             </div>
           </div>
 
-          <CommentList comments={[]} />
+          <CommentList postId={post.id} />
         </CardFooter>
       </Card>
     </ReactionProvider>
