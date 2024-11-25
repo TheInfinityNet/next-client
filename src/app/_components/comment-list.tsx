@@ -30,7 +30,7 @@ export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
           <AvatarFallback>{comment.owner.name}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
-          <div className="flex-col rounded-xl bg-muted p-2">
+          <div className="flex-col rounded-xl bg-muted p-2 w-fit">
             <div className="font-bold">{comment.owner.name}</div>
             <p>{comment.content.text}</p>
           </div>
@@ -73,7 +73,7 @@ export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
 
           {showReplies && (
             <div className="ml-12">
-              <CommentList postId={comment.postId} commentId={comment.id} />
+              <CommentList commentId={comment.id} />
             </div>
           )}
         </div>
@@ -83,11 +83,13 @@ export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
 }
 
 type CommentListProps = {
-  postId: string;
+  postId?: string;
   commentId?: string;
 };
 
 export function CommentList({ postId, commentId }: CommentListProps) {
+  const [toggle, setToggle] = useState(true);
+
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, isError } =
     useInfiniteQuery(
       createGetCommentsInfinityQueryOptions(
@@ -102,21 +104,36 @@ export function CommentList({ postId, commentId }: CommentListProps) {
     return <div className="p-4">Error loading comments. Please try again.</div>;
   }
 
-  return (
-    <div className="space-y-2">
-      {comments?.map((comment, index) => (
-        <CommentCard key={comment.id} comment={comment} />
-      ))}
+  if (isLoading) {
+    return <div className="p-4">Loading comments...</div>;
+  }
 
-      {hasNextPage && (
-        <div className="p-4">
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetching}
-            className="w-full p-2 bg-gray-200 rounded-md"
-          >
-            {isFetching ? "Loading..." : "Load more"}
-          </button>
+  return (
+    <div className="space-y-2 w-full">
+      <Button
+        onClick={() => setToggle((prev) => !prev)}
+        className="p-0"
+        variant={"link"}
+        size={"sm"}
+      >
+        {toggle ? "Hide" : "Show"} comments
+      </Button>
+
+      {toggle && (
+        <div>
+          {comments?.map((comment) => (
+            <CommentCard key={comment.id} comment={comment} />
+          ))}
+          {hasNextPage && (
+            <Button
+              variant={"link"}
+              className="w-full"
+              onClick={() => fetchNextPage()}
+              disabled={isFetching}
+            >
+              {isFetching ? "Loading..." : "Load more"}
+            </Button>
+          )}
         </div>
       )}
     </div>
