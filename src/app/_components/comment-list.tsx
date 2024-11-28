@@ -7,9 +7,11 @@ import {
 } from "@/components/ui/hover-card";
 import { createGetCommentsInfinityQueryOptions } from "@/lib/api/apis/get-comments.api";
 import { CommentResponseSchema } from "@/lib/api/schemas/comment.schema";
-import { cn } from "@/lib/utils";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useCallback, useRef, useState } from "react";
+import { useState } from "react";
+import { CommentReactionButton } from "./comment-reaction-button";
+import { ReactionProvider } from "./post-card";
+import { CommentReactionCounts } from "./comment-reaction-count";
 
 export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
   const [showReplies, setShowReplies] = useState(false);
@@ -21,44 +23,39 @@ export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
           className={"absolute border-l border-solid top-0 ml-5 bottom-5"}
         />
       )}
-      <div className="w-full flex gap-x-2 ">
-        <Avatar>
-          <AvatarImage
-            src={comment.owner.avatar?.url}
-            alt={comment.owner.name}
-          />
-          <AvatarFallback>{comment.owner.name}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1">
-          <div className="flex-col rounded-xl bg-muted p-2 w-fit">
-            <div className="font-bold">{comment.owner.name}</div>
-            <p>{comment.content.text}</p>
-          </div>
-          <div className="flex justify-between items-center text-sm mt-1">
-            <div className="flex gap-x-3">
-              <Button variant={"link"} className="p-0 ">
-                {comment.createdAt}
-              </Button>
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <Button variant={"link"} className="p-0 ">
-                    Like
-                  </Button>
-                </HoverCardTrigger>
-                <HoverCardContent
-                  className="p-1 flex space-x-2 rounded-full bg-white shadow-lg border"
-                  align="center"
-                  sideOffset={8}
-                  style={{ minWidth: "fit-content", whiteSpace: "nowrap" }}
-                ></HoverCardContent>
-              </HoverCard>
-              <Button variant={"link"} className="p-0 ">
-                Reply
-              </Button>
+
+      <ReactionProvider
+        initialReactionCounts={comment.reactionCounts}
+        initialReaction={comment.reaction}
+      >
+        <div className="w-full flex gap-x-2 ">
+          <Avatar>
+            <AvatarImage
+              src={comment.owner.avatar?.url}
+              alt={comment.owner.name}
+            />
+            <AvatarFallback>{comment.owner.name}</AvatarFallback>
+          </Avatar>
+          <div className="flex-1">
+            <div className="flex-col rounded-xl bg-muted p-2 w-fit relative">
+              <div className="font-bold">{comment.owner.name}</div>
+              <p>{comment.content.text}</p>
+              <CommentReactionCounts commentId={comment.id} />
+            </div>
+            <div className="flex justify-between items-center text-sm mt-1">
+              <div className="flex gap-x-3">
+                <Button variant={"link"} className="p-0 ">
+                  {comment.createdAt}
+                </Button>
+                <CommentReactionButton commentId={comment.id} />
+                <Button variant={"link"} className="p-0 ">
+                  Reply
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ReactionProvider>
 
       {comment.replyCount > 0 && (
         <div className="relative">

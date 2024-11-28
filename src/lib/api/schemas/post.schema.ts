@@ -151,6 +151,7 @@ export const basePostResponseSchema = basePostSchema
     audiance: basePostAudienceSchema,
     reactionCounts: postReactionCountsResponseSchema.optional(),
     reaction: postReactionTypeSchema.optional(),
+    commentCount: z.number(),
     popularComments: z.array(commentResponseSchema).optional(),
     owner: baseProfileResponseSchema.pick({
       id: true,
@@ -184,8 +185,12 @@ export const multiMediaPostResponseSchema = basePostResponseSchema.extend({
   type: z.literal("MultiMedia"),
   aggregates: z.array(
     z.discriminatedUnion("type", [
-      photoPostResponseSchema,
-      videoPostResponseSchema,
+      photoPostResponseSchema.extend({
+        parentId: z.string().uuid(),
+      }),
+      videoPostResponseSchema.extend({
+        parentId: z.string().uuid(),
+      }),
     ]),
   ),
 });

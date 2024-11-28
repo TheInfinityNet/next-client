@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { baseProfileResponseSchema } from "./profile.schema";
 import { textContentSchema } from "./text-content.schema";
+import {
+  commentReactionCountsResponseSchema,
+  commentReactionTypeSchema,
+} from "./comment-reaction.schema";
 
 export const baseCommentSchema = z.object({
   id: z.coerce.string().uuid(),
@@ -25,6 +29,8 @@ export const commentResponseSchema = baseCommentSchema
       avatar: true,
       name: true,
     }),
+    reactionCounts: commentReactionCountsResponseSchema.optional(),
+    reaction: commentReactionTypeSchema.optional(),
   });
 
 export type CommentResponseSchema = z.infer<typeof commentResponseSchema>;

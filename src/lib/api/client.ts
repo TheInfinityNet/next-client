@@ -1,26 +1,133 @@
+import { COOKIE_KEY_ACCESS_TOKEN, COOKIE_KEY_REFRESH_TOKEN } from "@/constants";
 import axios, { AxiosRequestConfig, AxiosResponse, isAxiosError } from "axios";
+import { getCookie, setCookie } from "cookies-next";
+import { jwtDecode } from "jwt-decode";
+import { accessTokenPayloadSchema } from "./schemas/tokens.schema";
+import { refreshTokenApi } from "./apis/refresh-token.api";
+import qs from "qs";
 
 const client = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
+
+export const apiClient = {
+  post: <TResponse = unknown, RRequest = unknown>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.post<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      data,
+      config,
+    );
+  },
+
+  get: <TResponse = unknown, TQueryParams = unknown>(
+    url: string,
+    params?: TQueryParams,
+    config?: AxiosRequestConfig<TQueryParams>,
+  ): Promise<AxiosResponse<TResponse, TQueryParams>> => {
+    return client.get<TResponse, AxiosResponse<TResponse, TQueryParams>>(url, {
+      params,
+      paramsSerializer: (params) => qs.stringify(params),
+      ...config,
+    });
+  },
+
+  put: <TResponse = unknown, RRequest = unknown>(
+    url: string,
+    data: RRequest,
+    config?: AxiosRequestConfig<RRequest>,
+  ): Promise<AxiosResponse<TResponse, RRequest>> => {
+    return client.put<TResponse, AxiosResponse<TResponse>, RRequest>(
+      url,
+      data,
+      config,
+    );
+  },
+
+  delete: <TResponse = unknown, TQueryParams = unknown>(
+    url: string,
+    params?: TQueryParams,
+    config?: AxiosRequestConfig<TQueryParams>,
+  ): Promise<AxiosResponse<TResponse, TQueryParams>> => {
+    return client.delete<TResponse, AxiosResponse<TResponse, TQueryParams>>(
+      url,
+      {
+        params,
+        ...config,
+      },
+    );
+  },
+};
+
+let isRefreshing = false;
+let refreshPromise: Promise<string> | null = null;
+
+async function getAccessToken(): Promise<string | null> {
+  let accessToken: string | undefined = undefined;
+
+  try {
+    accessToken = await getCookie(COOKIE_KEY_ACCESS_TOKEN);
+    if (accessToken) {
+      const payload = accessTokenPayloadSchema.parse(jwtDecode(accessToken));
+      if (payload.exp * 1000 > Date.now()) {
+        return accessToken;
+      }
+    }
+  } catch (error) {
+    console.error("Failed to parse access token payload", error);
+  }
+
+  let refreshToken: string | undefined = undefined;
+
+  try {
+    refreshToken = await getCookie(COOKIE_KEY_REFRESH_TOKEN);
+    if (!refreshToken) {
+      return null;
+    }
+  } catch (error) {
+    console.error("Failed to get refresh token", error);
+    return null;
+  }
+
+  if (!isRefreshing) {
+    isRefreshing = true;
+    refreshPromise = refreshTokenApi({ refreshToken })
+      .then((response) => {
+        const { accessToken: newAccessToken } = response;
+        setCookie(COOKIE_KEY_ACCESS_TOKEN, newAccessToken);
+        return newAccessToken;
+      })
+      .catch((error) => {
+        throw error;
+      })
+      .finally(() => {
+        isRefreshing = false;
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+}
 
 client.interceptors.request.use(
   async (config) => {
+    const accessToken = await getAccessToken();
+    if (accessToken) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
     return config;
   },
   null,
   {
-    runWhen: (request) => !!!request.headers["No-Auth"],
-  }
+    runWhen: (request) => !request.headers["No-Auth"],
+  },
 );
 
 client.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
     if (isAxiosError(error)) {
       if (error.code === "ERR_NETWORK") {
@@ -35,67 +142,7 @@ client.interceptors.response.use(
       type: "UnknownError",
       message: "An unknown error occurred",
     };
-  }
+  },
 );
-
-export const apiClient = {
-  post: <TResponse = any, RRequest = any>(
-    url: string,
-    data: RRequest,
-    config?: AxiosRequestConfig<RRequest>
-  ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.post<TResponse, AxiosResponse<TResponse>, RRequest>(
-      url,
-      data,
-      config
-    );
-  },
-
-  get: <TResponse = unknown, TQueryParams = unknown>(
-    url: string,
-    query?: TQueryParams,
-    config?: AxiosRequestConfig<TQueryParams>
-  ): Promise<AxiosResponse<TResponse, TQueryParams>> => {
-    return client.get<TResponse, AxiosResponse<TResponse, TQueryParams>>(url, {
-      params: query,
-      ...config,
-    });
-  },
-
-  put: <TResponse = any, RRequest = any>(
-    url: string,
-    data: RRequest,
-    config?: AxiosRequestConfig<RRequest>
-  ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.put<TResponse, AxiosResponse<TResponse>, RRequest>(
-      url,
-      data,
-      config
-    );
-  },
-
-  delete: <TResponse = any, RRequest = any>(
-    url: string,
-    data?: RRequest,
-    config?: AxiosRequestConfig<RRequest>
-  ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.delete<TResponse, AxiosResponse<TResponse>, RRequest>(
-      url,
-      { data, ...config }
-    );
-  },
-
-  patch: <TResponse = any, RRequest = any>(
-    url: string,
-    data: RRequest,
-    config?: AxiosRequestConfig<RRequest>
-  ): Promise<AxiosResponse<TResponse, RRequest>> => {
-    return client.patch<TResponse, AxiosResponse<TResponse>, RRequest>(
-      url,
-      data,
-      config
-    );
-  },
-};
 
 export default client;
