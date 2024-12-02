@@ -14,7 +14,7 @@ export async function getUserProfileApi(
   const response = await apiClient.get<
     GetUserProfileResponseSchema,
     GetUserProfileQueriesSchema
-  >(`/profile/users/${params.userId}`, query, {
+  >(`/profiles/users/${params.userId}`, query, {
     ...config,
   });
   return response.data;

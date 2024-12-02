@@ -5,10 +5,13 @@ import { forbiddenErrorResponseSchema, resourceNotFoundErrorResponseSchema, unau
 export const editUserProfileBodySchema = z.object({
   id: z.coerce.string().uuid(),
   username: z.coerce.string().optional(),
-  name: z.coerce.string().optional(),
+  firstName: z.coerce.string().optional(),
+  middleName: z.coerce.string().optional(),
+  lastName: z.coerce.string().optional(),
   mobileNumber: z.coerce.string().optional(),
   birthdate: z.string().datetime().optional(),
   gender: z.coerce.string().optional(),
+  bio: z.coerce.string().optional(),
 });
 
 export const editUserProfileResponseSchema = z.object({

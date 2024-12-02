@@ -34,7 +34,7 @@ export const basePostSchema = z.object({
     "MultiMedia",
   ]),
   ownerId: z.string().uuid(),
-  audiance: basePostAudienceSchema,
+  audience: basePostAudienceSchema,
   content: textContentSchema.optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -97,7 +97,7 @@ export const basePostRequestSchema = basePostSchema
     deletedAt: true,
   })
   .extend({
-    audiance: postAudienceRequestSchema,
+    audience: postAudienceRequestSchema,
   });
 
 export const textPostRequestSchema = basePostRequestSchema.extend({
@@ -148,7 +148,7 @@ export const basePostResponseSchema = basePostSchema
     ownerId: true,
   })
   .extend({
-    audiance: basePostAudienceSchema,
+    audience: basePostAudienceSchema,
     reactionCounts: postReactionCountsResponseSchema.optional(),
     reaction: postReactionTypeSchema.optional(),
     commentCount: z.number(),

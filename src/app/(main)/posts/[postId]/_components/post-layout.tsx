@@ -65,10 +65,6 @@ export function PostCard({
         return (
           <EarthIcon className="size-4" />
         );
-      case "Private":
-        return (
-          <EarthIcon className="size-4" />
-        );
       case "OnlyMe":
         return (
           <EarthIcon className="size-4" />

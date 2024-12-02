@@ -110,15 +110,28 @@ export default function EditUserProfileForm({
             />
             <FormField
               control={editUserProfileForm.control}
-              name="name"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>First name</FormLabel>
                   <FormControl>
                     <Input placeholder="Name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+            <FormField
+              control={editUserProfileForm.control}
+              name="lastName"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Last name</FormLabel>
+                      <FormControl>
+                          <Input placeholder="Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
               )}
             />
             <FormField
@@ -158,6 +171,19 @@ export default function EditUserProfileForm({
                   </FormControl>
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+            <FormField
+              control={editUserProfileForm.control}
+              name="birthdate"
+              render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Birth date</FormLabel>
+                      <FormControl>
+                          <Input placeholder="Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                  </FormItem>
               )}
             />
             <CardFooter className="flex justify-between">

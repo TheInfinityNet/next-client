@@ -42,7 +42,7 @@ export async function getCommentsApi(
 ): Promise<GetCommentsResponseSchema> {
   if (params.postId) {
     const response = await apiClient.get<GetCommentsResponseSchema>(
-      `/posts/${params.postId}/comments`,
+      `/comments/posts/${params.postId}`,
       query,
     );
     return response.data;

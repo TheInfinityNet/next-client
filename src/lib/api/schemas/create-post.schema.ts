@@ -4,7 +4,7 @@ import { textContentRequestSchema } from "./text-content.schema";
 
 export const createPostBaseRequestSchema = z.object({
   content: textContentRequestSchema.optional(),
-  audiance: postAudienceRequestSchema,
+  audience: postAudienceRequestSchema,
 });
 export const createTextPostRequestSchema = createPostBaseRequestSchema.extend({
   type: z.literal("Text"),
