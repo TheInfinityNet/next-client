@@ -34,7 +34,7 @@ export async function getCommentReactionsApi(
   query: GetCommentReactionsQuery,
 ) {
   const response = await apiClient.get<GetCommentReactionsResponse>(
-    `/comments/${params.commentId}/reactions`,
+    `/reactions/comments/${params.commentId}`,
     query,
   );
   return response.data;

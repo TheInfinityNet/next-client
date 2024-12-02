@@ -32,7 +32,7 @@ export async function getPostReactionsApi(
   query: GetPostReactionsQuery,
 ) {
   const response = await apiClient.get<GetPostReactionsResponse>(
-    `/posts/${params.postId}/reactions`,
+    `/reactions/posts/${params.postId}`,
     query,
   );
   return response.data;

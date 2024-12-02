@@ -114,6 +114,7 @@ async function getAccessToken(): Promise<string | null> {
 
 client.interceptors.request.use(
   async (config) => {
+    config.headers["Accept-Language"] = "en";
     const accessToken = await getAccessToken();
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;

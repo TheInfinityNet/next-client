@@ -12,6 +12,6 @@ export async function editProfileApi(
   const response = await apiClient.put<
     EditUserProfileResponseSchema,
     EditUserProfileSchema
-  >("/api/profile", data, config);
+  >("/api/profiles/users", data, config);
   return response.data;
 }

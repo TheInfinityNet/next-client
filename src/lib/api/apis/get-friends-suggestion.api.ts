@@ -8,7 +8,7 @@ export async function getFriendSuggestionsApi(
   query?: GetFriendsSuggestionQuerySchema,
 ): Promise<GetFriendsSuggestionResponseSchema> {
   const response = await apiClient.get<GetFriendsSuggestionResponseSchema>(
-    "/friends/suggestions",
+    "/profiles/friends/suggestions",
     query,
   );
   return response.data;
