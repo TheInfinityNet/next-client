@@ -109,15 +109,15 @@ export function PostCard({ post }: PostCardProps) {
             </Link>
             <div className="flex text-muted-foreground text-sm items-center gap-x-1">
               <div className="font-semibold">{post.createdAt}</div>
-              {post.audiance.type === "Public" ? (
+              {post.audience.type === "Public" ? (
                 <EarthIcon className="size-4" />
-              ) : post.audiance.type === "Friend" ? (
+              ) : post.audience.type === "Friend" ? (
                 <EarthIcon className="size-4" />
-              ) : post.audiance.type === "OnlyMe" ? (
+              ) : post.audience.type === "OnlyMe" ? (
                 <EarthIcon className="size-4" />
-              ) : post.audiance.type === "Custom" ||
-                post.audiance.type === "Include" ||
-                post.audiance.type === "Exclude" ? (
+              ) : post.audience.type === "Custom" ||
+                post.audience.type === "Include" ||
+                post.audience.type === "Exclude" ? (
                 <EarthIcon className="size-4" />
               ) : null}
             </div>

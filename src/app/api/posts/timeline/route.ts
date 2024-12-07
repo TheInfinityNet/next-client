@@ -23,7 +23,7 @@ export async function GET(_: NextRequest) {
           text: "Hello, World!",
           facets: [],
         },
-        audiance: {
+        audience: {
           type: "Custom",
         },
         reactionCounts: {
@@ -49,7 +49,7 @@ export async function GET(_: NextRequest) {
           facets: [],
         },
         photo: metadataPhotoFaker(),
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
@@ -69,7 +69,7 @@ export async function GET(_: NextRequest) {
           facets: [],
         },
         video: metadataVideoFaker(),
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
@@ -89,7 +89,7 @@ export async function GET(_: NextRequest) {
           facets: [],
         },
         file: metadataFileFaker(),
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
@@ -109,7 +109,7 @@ export async function GET(_: NextRequest) {
           facets: [],
         },
         audio: metadataAudioFaker(),
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
@@ -143,7 +143,7 @@ export async function GET(_: NextRequest) {
               facets: [],
             },
             photo: metadataPhotoFaker(),
-            audiance: {
+            audience: {
               type: "Custom",
             },
             createdAt: new Date().toISOString(),
@@ -163,14 +163,14 @@ export async function GET(_: NextRequest) {
               facets: [],
             },
             video: metadataVideoFaker(),
-            audiance: {
+            audience: {
               type: "Custom",
             },
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           },
         ],
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
@@ -217,7 +217,7 @@ export async function GET(_: NextRequest) {
                 facets: [],
               },
               photo: metadataPhotoFaker(),
-              audiance: {
+              audience: {
                 type: "Custom",
               },
               createdAt: new Date().toISOString(),
@@ -237,7 +237,7 @@ export async function GET(_: NextRequest) {
                 facets: [],
               },
               video: metadataVideoFaker(),
-              audiance: {
+              audience: {
                 type: "Custom",
               },
               createdAt: new Date().toISOString(),
@@ -257,20 +257,20 @@ export async function GET(_: NextRequest) {
                 facets: [],
               },
               video: metadataVideoFaker(),
-              audiance: {
+              audience: {
                 type: "Custom",
               },
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             },
           ],
-          audiance: {
+          audience: {
             type: "Custom",
           },
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
-        audiance: {
+        audience: {
           type: "Custom",
         },
         createdAt: new Date().toISOString(),
