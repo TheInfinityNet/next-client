@@ -23,3 +23,8 @@ export const tokenSchema = z.object({
   refreshToken: refreshTokenSchema,
 });
 export type TokenSchema = z.infer<typeof tokenSchema>;
+
+export const tokensResponseSchema = z.object({
+  accessToken: accessTokenSchema,
+  refreshToken: refreshTokenSchema,
+});
