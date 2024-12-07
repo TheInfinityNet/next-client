@@ -25,7 +25,7 @@ export type RemoveFriendErrorResponseSchema = z.infer<
 
 export async function removeFriendApi(params: RemoveFriendParamsSchema) {
   const response = await apiClient.delete<RemoveFriendResponseSchema>(
-    `/friends/${params.userId}`,
+    `/relationships/friends/${params.userId}`,
   );
   return response.data;
 }

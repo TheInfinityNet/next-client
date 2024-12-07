@@ -26,7 +26,7 @@ export type DeclineFriendErrorResponseSchema = z.infer<
 
 export async function declineFriendApi(body: DeclineFriendBodySchema) {
   const response = await apiClient.put<DeclineFriendResponseSchema>(
-    `/friends/requests/decline`,
+    `/relationships/friends/requests/decline`,
     body,
   );
   return response.data;

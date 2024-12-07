@@ -30,6 +30,9 @@ import {
   SignInRequestSchema,
 } from "@/lib/api/schemas/sign-in.schema";
 import { useSignInMutation } from "@/hooks/mutations/sign-in.mutation";
+import {socialSignInParamsSchema} from "@/lib/api/apis/social-sign-in.api";
+import {useSocialSignIn} from "@/hooks/queries/get-social-url.query";
+import {useState} from "react";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -66,11 +69,44 @@ export default function SignInPage() {
     });
   });
 
+  const [provider, setProvider] = useState<string | null>(null);
+
+  const { data, isLoading, isError } = useSocialSignIn(provider ?? "Google");
+
   const handleSocialSignIn = (provider: string) => {
-    toast({
-      title: "Social sign in",
-      description: `Signing in with ${provider}`,
-    });
+    const isValidProvider = ["Google", "Facebook"].includes(provider);
+
+    if (!isValidProvider) {
+      toast({
+        title: "Invalid provider",
+        description: "Please choose a valid provider.",
+      });
+      return;
+    }
+
+    setProvider(provider);
+
+    if (isLoading) {
+      toast({
+        title: "Signing in",
+        description: `Attempting to sign in with ${provider}...`,
+      });
+    }
+
+    if (isError) {
+      toast({
+        title: "Sign-in failed",
+        description: "Could not sign in. Please try again later.",
+      });
+    }
+
+    if (data) {
+      toast({
+        title: "Sign-in successful",
+        description: `Redirecting to ${data.url}`,
+      });
+      window.location.href = data.url;
+    }
   };
 
   return (

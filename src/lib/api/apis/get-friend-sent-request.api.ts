@@ -8,7 +8,7 @@ export async function getFriendSentRequestsApi(
   query?: GetFriendSentRequestsQuerySchema,
 ): Promise<GetFriendSentRequestsResponseSchema> {
   const response = await apiClient.get<GetFriendSentRequestsResponseSchema>(
-    "/profiles/friends/sent-requests",
+    "/relationships/friends/sent-requests",
     query,
   );
   return response.data;

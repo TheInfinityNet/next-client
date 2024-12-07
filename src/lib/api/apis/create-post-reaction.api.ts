@@ -44,7 +44,7 @@ export async function createPostReactionApi(
   body: CreatePostReactionBodySchema,
 ) {
   const response = await apiClient.post<CreatePostReactionResponseSchema>(
-    `/posts/${params.postId}/reactions`,
+    `/reactions/posts/${params.postId}`,
     body,
   );
   return response.data;

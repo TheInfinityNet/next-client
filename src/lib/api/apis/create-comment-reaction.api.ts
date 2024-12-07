@@ -44,7 +44,7 @@ export async function createCommentReactionApi(
   body: CreateCommentReactionBodySchema,
 ) {
   const response = await apiClient.post<CreateCommentReactionResponseSchema>(
-    `/comments/${params.commentId}/reactions`,
+    `/reactions/comments/${params.commentId}`,
     body,
   );
   return response.data;

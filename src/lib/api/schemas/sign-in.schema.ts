@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { tokensResponseSchema } from "./tokens.schema";
+import { tokenSchema } from "./tokens.schema";
 import { userProfileResponseSchema } from "./user-profile.schema";
 import { validationErrorResponseSchema } from "./error.schema";
 
@@ -8,7 +8,7 @@ export const signInRequestSchema = z.object({
   password: z.coerce.string().min(6).max(20),
 });
 export const signInResponseSchema = z.object({
-  tokens: z.lazy(() => tokensResponseSchema),
+  tokens: z.lazy(() => tokenSchema),
   user: z.lazy(() => userProfileResponseSchema),
 });
 export const signInErrorResponseSchema = z.discriminatedUnion("type", [

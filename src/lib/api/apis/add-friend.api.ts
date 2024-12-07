@@ -22,7 +22,7 @@ export type AddFriendErrorResponseSchema = z.infer<
 
 export async function addFriendApi(body: AddFriendBodySchema) {
   const response = await apiClient.post<AddFriendResponseSchema>(
-    `/friends/requests`,
+    `/relationships/friends/requests`,
     body,
   );
   return response.data;
