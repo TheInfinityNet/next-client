@@ -26,7 +26,7 @@ export type CancelFriendErrorResponseSchema = z.infer<
 
 export async function cancelFriendApi(body: CancelFriendParamsSchema) {
   const response = await apiClient.delete<CancelFriendResponseSchema>(
-    `/friends/requests/${body.userId}`,
+    `/relationships/friends/requests/${body.userId}`,
   );
   return response.data;
 }

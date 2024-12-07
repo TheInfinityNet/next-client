@@ -26,7 +26,7 @@ export type AcceptFriendErrorResponseSchema = z.infer<
 
 export async function acceptFriendApi(body: AcceptFriendBodySchema) {
   const response = await apiClient.put<AcceptFriendResponseSchema>(
-    `/friends/requests/accept`,
+    `/relationships/friends/requests/accept`,
     body,
   );
   return response.data;

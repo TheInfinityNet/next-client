@@ -29,7 +29,7 @@ export async function deleteCommentReactionApi(
   params: DeleteCommentReactionParamsSchema,
 ) {
   const response = await apiClient.delete<DeleteCommentReactionResponseSchema>(
-    `/comments/${params.commentId}/reactions`,
+    `/reactions/comments/${params.commentId}`,
   );
   return response.data;
 }
