@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { socialSignInApi, socialSignInParamsSchema } from "@/lib/api/apis/social-sign-in.api";
+import { socialSignInApi, socialSignInQuerySchema } from "@/lib/api/apis/social-sign-in.api";
 
 export function useSocialSignIn(provider: string) {
-    const parsed = socialSignInParamsSchema.safeParse({ provider });
+    const parsed = socialSignInQuerySchema.safeParse({ provider });
 
     if (!parsed.success) {
         throw new Error(

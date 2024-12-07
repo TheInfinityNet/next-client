@@ -30,7 +30,6 @@ import {
   SignInRequestSchema,
 } from "@/lib/api/schemas/sign-in.schema";
 import { useSignInMutation } from "@/hooks/mutations/sign-in.mutation";
-import {socialSignInParamsSchema} from "@/lib/api/apis/social-sign-in.api";
 import {useSocialSignIn} from "@/hooks/queries/get-social-url.query";
 import {useState} from "react";
 
