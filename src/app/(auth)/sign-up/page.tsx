@@ -53,20 +53,20 @@ export default function SignUpPage() {
       password: "Password@123",
       passwordConfirmation: "Password@123",
       mobileNumber: "0123456789",
-      birthdate: "10/12/2003",
+      birthdate: "2003-10-12",
       gender: "Male",
-      acceptTerms: false,
+      acceptTerms: true,
     },
   });
 
   const onSubmit = signUpForm.handleSubmit((values) => {
     signUpMutation.mutate(values, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast({
           title: "Sign up successful",
-          description: "You have been signed up",
+          description: data.message,
         });
-        router.push("/sign-in");
+        router.push("/verify?email=" + values.email);
       },
       onError: (error) => {
         toast({

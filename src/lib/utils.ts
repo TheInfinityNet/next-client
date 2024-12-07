@@ -8,11 +8,17 @@ export function cn(...inputs: ClassValue[]) {
 
 export function mapFieldErrorToFormError<T extends FieldValues>(
   setError: UseFormSetError<T>,
-  errors: Record<string, string[]>,
+  errors: Record<string, string[] | string>,
 ) {
   for (const [field, messages] of Object.entries(errors)) {
+    if (Array.isArray(messages)) {
+      return setError(field as unknown as Path<T>, {
+        message: messages.join(", "),
+      });
+    }
+
     setError(field as unknown as Path<T>, {
-      message: messages[0],
+      message: messages,
     });
   }
 }
