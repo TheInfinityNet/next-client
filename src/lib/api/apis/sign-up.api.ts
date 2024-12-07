@@ -12,7 +12,7 @@ export async function signUpApi(
   const response = await apiClient.post<
     SignUpResponseSchema,
     SignUpRequestSchema
-  >("/identity/auth/sign-up", data, {
+  >("/auth/sign-up", data, {
     headers: {
       "No-Auth": true,
     },
