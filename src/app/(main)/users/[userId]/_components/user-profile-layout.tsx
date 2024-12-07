@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
@@ -43,12 +43,12 @@ export function UserProfileLayout({
   children,
   userId,
 }: UserProfileLayoutProps) {
-  const getUserProfileQuery = useSuspenseQuery(
-    createGetUserProfileQueryOptions({ userId })
+  const getUserProfileQuery = useQuery(
+    createGetUserProfileQueryOptions({ userId }),
   );
-  const [isShowFriendSuggestion, setIsShowFriendSuggestion] = useState<boolean>(
-    true
-  );
+
+  const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
+    useState<boolean>(true);
 
   useEffect(() => {
     console.log(isShowFriendSuggestion);
@@ -71,10 +71,17 @@ export function UserProfileLayout({
     }
   };
 
+  if (!userProfile) {
+    return null;
+  }
+
   return (
     <Fragment>
-      <ProfileCoverPhoto profileId={userId} url={userProfile.cover?.url} />
-      <section aria-label="Profile information" className="-mt-20 md:-mt-12 mx-2">
+      <ProfileCoverPhoto profileId={userId} url={userProfile?.cover?.url} />
+      <section
+        aria-label="Profile information"
+        className="-mt-20 md:-mt-12 mx-2"
+      >
         <div className="flex md:items-end z-0 flex-col md:flex-row items-center">
           <UserProfileAvatar
             userProfile={userProfile}

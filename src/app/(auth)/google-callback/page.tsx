@@ -11,15 +11,10 @@ export default function SocialCallbackPage() {
   const { toast } = useToast();
   const socialCallbackMutation = useSocialCallbackMutation();
 
-  // Add a local state to track if mutation has been triggered
-  const [isTriggered, setIsTriggered] = React.useState(false);
-
   React.useEffect(() => {
-    if (isTriggered) return; // Prevent re-triggering the mutation
-
     const code = searchParams.get("code");
 
-    // Validate code
+    // Kiểm tra tham số `code` từ URL
     if (!code) {
       toast({
         title: "Error",
@@ -30,8 +25,7 @@ export default function SocialCallbackPage() {
       return;
     }
 
-    // Trigger mutation
-    setIsTriggered(true); // Ensure the mutation is called only once
+    // Gọi mutation để xử lý callback
     socialCallbackMutation.mutate(
         { provider: "Google", code },
         {
@@ -40,19 +34,19 @@ export default function SocialCallbackPage() {
               title: "Sign in successful",
               description: "You have been signed in successfully.",
             });
-            router.push("/"); // Redirect after successful sign-in
+            router.push("/"); // Chuyển hướng sau khi đăng nhập thành công
           },
           onError: (error) => {
             toast({
               title: "Sign in failed",
               description: error?.message || "An unexpected error occurred.",
-              variant: "destructive", // Show an error toast
+              variant: "destructive", // Hiển thị thông báo lỗi
             });
-            router.push("/sign-in"); // Redirect to sign-in page on error
+            router.push("/sign-in"); // Chuyển hướng về trang đăng nhập
           },
         }
     );
-  }, [searchParams, isTriggered, socialCallbackMutation, router, toast]);
+  }, [searchParams, router, toast, socialCallbackMutation]);
 
   return (
       <div className="flex items-center justify-center h-screen">

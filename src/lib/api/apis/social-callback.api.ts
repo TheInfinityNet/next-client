@@ -10,7 +10,7 @@ export async function socialCallbackApi(
   const response = await apiClient.post<
     SignInResponseSchema,
     SocialCallbackRequestSchema
-  >("/auth/social-callback", data, {
+  >("/auth/google-callback", data, {
     headers: {
       "No-Auth": true,
     },
