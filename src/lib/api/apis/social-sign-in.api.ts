@@ -16,6 +16,11 @@ export async function socialSignInApi(
   const response = await apiClient.get<SocialSignInResponseSchema>(
       '/auth/social',
       query,
+      {
+        headers: {
+          "No-Auth": true,
+        }
+      }
   );
   return response.data;
 }

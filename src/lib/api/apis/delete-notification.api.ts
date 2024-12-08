@@ -8,7 +8,7 @@ export async function removeNotification(
   params: RemoveNotificationParamsSchema
 ): Promise<RemoveNotificationResponseSchema> {
   const response = await apiClient.delete<RemoveNotificationResponseSchema>(
-    `/notifications/delete/${params.notificationId}`
+    `/notifications/${params.notificationId}`
   );
 
   return response.data;

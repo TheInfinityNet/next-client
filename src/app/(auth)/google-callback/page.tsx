@@ -11,15 +11,14 @@ export default function SocialCallbackPage() {
     const { toast } = useToast();
     const socialCallbackMutation = useSocialCallbackMutation();
 
-    // Add a local state to track if mutation has been triggered
     const [isTriggered, setIsTriggered] = React.useState(false);
 
+    // Memoize code to avoid re-computation
+    const code = React.useMemo(() => searchParams.get("code"), [searchParams]);
+
     React.useEffect(() => {
-        if (isTriggered) return; // Prevent re-triggering the mutation
+        if (isTriggered || !code) return; // Prevent re-triggering or invalid code
 
-        const code = searchParams.get("code");
-
-        // Validate code
         if (!code) {
             toast({
                 title: "Error",
@@ -30,7 +29,6 @@ export default function SocialCallbackPage() {
             return;
         }
 
-        // Trigger mutation
         setIsTriggered(true); // Ensure the mutation is called only once
         socialCallbackMutation.mutate(
             { provider: "Google", code },
@@ -52,7 +50,7 @@ export default function SocialCallbackPage() {
                 },
             }
         );
-    }, [searchParams, isTriggered, socialCallbackMutation, router, toast]);
+    }, [isTriggered, code, router, toast]); // Ensure stable dependencies
 
     return (
         <div className="flex items-center justify-center h-screen">
