@@ -9,6 +9,5 @@ type Props = {
 };
 export default async function Layout({ children, params }: Props) {
   const { userId } = await params;
-
   return <UserProfileLayout userId={userId}>{children}</UserProfileLayout>;
 }
