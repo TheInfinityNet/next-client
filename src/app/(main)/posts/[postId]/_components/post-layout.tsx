@@ -60,15 +60,7 @@ export function PostCard({
   const renderAudianceIcon = () => {
     switch (post.audience.type) {
       case "Public":
-<<<<<<< HEAD
-        return (
-          <EarthIcon className="size-4" />
-        );
-=======
-        return <EarthIcon className="size-4" />;
-      case "Private":
-        return <EarthIcon className="size-4" />;
->>>>>>> 942987e93344fbc8659800e130e477d3c177a48e
+        return <EarthIcon className="size-4" />
       case "OnlyMe":
         return <EarthIcon className="size-4" />;
       case "Include":
