@@ -7,8 +7,15 @@ import { GetFriendListResponseSchema } from "@/lib/api/schemas/get-friend-list.s
 import { createGetFriendListQueryOptions } from "@/hooks/queries/get-friend-list.query";
 
 export default function Page() {
-  const { data, fetchNextPage, hasNextPage, isFetching, isLoading, isError } =
-    useInfiniteQuery(createGetFriendListQueryOptions({ limit: 10 }));
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useInfiniteQuery(createGetFriendListQueryOptions({ limit: 10 }));
 
   const observer = useRef<IntersectionObserver>();
 
@@ -30,11 +37,10 @@ export default function Page() {
   );
 
   const friendList = useMemo(() => {
-    return data?.pages.reduce<GetFriendListResponseSchema["items"]>(
-      (acc, page) => {
+    return (
+      data?.pages.reduce<GetFriendListResponseSchema["items"]>((acc, page) => {
         return [...acc, ...page.items];
-      },
-      [],
+      }, []) ?? []
     );
   }, [data]);
 
@@ -44,29 +50,39 @@ export default function Page() {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-      {friendList?.map((friend, index) => (
-        <UserFriendCard
-          key={index}
-          name={friend.name}
-          userId={friend.id}
-          avatarUrl={friend.avatar?.url}
-          totalMutualFriend={friend.mutualFriendsCount}
-          status="Connected"
-        />
-      ))}
-      <div
-        key={friendList?.length}
-        ref={lastElementRef}
-        className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
-      >
-        <UserFriendCardLoading />
-      </div>
-      {isLoading && (
+      {isSuccess ? (
+        friendList.length === 0 ? (
+          <div className="col-span-full flex justify-center items-center">
+            <p className="text-gray-500 text-lg">No friends found</p>
+          </div>
+        ) : (
+          friendList.map((friend, index) => (
+            <UserFriendCard
+              key={index}
+              name={friend.name}
+              userId={friend.id}
+              avatarUrl={friend.avatar?.url}
+              totalMutualFriend={friend.mutualFriendsCount}
+              status="Connected"
+            />
+          ))
+        )
+      ) : (
         <>
           <UserFriendCardLoading />
           <UserFriendCardLoading />
           <UserFriendCardLoading />
         </>
+      )}
+
+      {friendList?.length > 0 && (
+        <div
+          key={friendList?.length}
+          ref={lastElementRef}
+          className="basis-3/5 min-[480px]:basis-2/5 md:basis-[calc(100%/3.5)]"
+        >
+          <UserFriendCardLoading />
+        </div>
       )}
     </div>
   );
