@@ -312,12 +312,12 @@ export function PostComposer() {
 
           <div className="flex items-center justify-between">
             <Controller
-              name="audience"
+              name="audience.type"
               control={control}
               render={({ field }) => (
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value.type}
+                  defaultValue={field.value}
                 >
                   <SelectTrigger className="w-[140px]">
                     <SelectValue placeholder="Audience" />
