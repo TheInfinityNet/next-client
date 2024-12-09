@@ -1,7 +1,9 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { CameraIcon } from "lucide-react";
-import { useRef } from "react";
+import { useRef, type ChangeEvent } from "react";
 
 type UserProfileAvatarProps = {
   userProfile: {
@@ -18,7 +20,40 @@ export default function UserProfileAvatar({
   handleUploadClick,
   handleFileChange,
 }: UserProfileAvatarProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+  const changeAvatarInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadPhotoMutation = useUploadPhotoMutation();
+
+  const onChangeAvatar = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      uploadPhotoMutation.mutate(
+        {
+          photo: file,
+        },
+        {
+          onSuccess(data) {
+            if (userProfile.avatar) {
+              userProfile.avatar.url = data.url;
+            }
+            toast({
+              title: "Success",
+              description: "Photo uploaded successfully",
+            });
+            console.log("Photo uploaded successfully:", data);
+          },
+          onError(error) {
+            toast({
+              title: "Error",
+              description: "Error uploading photo",
+            });
+            console.error("Error uploading photo:", error);
+          },
+        }
+      );
+    }
+  };
 
   return (
     <div className="relative">
@@ -35,16 +70,16 @@ export default function UserProfileAvatar({
       <Button
         className="absolute bottom-0 right-0 p-1 rounded-full"
         size={"icon"}
-        onClick={handleUploadClick}
+        onClick={() => changeAvatarInputRef.current?.click()}
       >
         <CameraIcon className="w-4 h-4" />
         <span className="sr-only">Change Avatar</span>
       </Button>
       <input
         type="file"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
+        className="hidden"
+        ref={changeAvatarInputRef}
+        onChange={onChangeAvatar}
       />
     </div>
   );
