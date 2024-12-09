@@ -2,19 +2,25 @@ import { apiClient } from "../client";
 import { SocialSignInResponseSchema} from "@/lib/api/schemas/social.schema";
 import {z} from "zod";
 
-export const socialSignInParamsSchema = z.object({
+export const socialSignInQuerySchema = z.object({
   provider: z.enum(["Google", "Facebook"]),
 });
 
 export type SocialSignInParamsSchema = z.infer<
-    typeof socialSignInParamsSchema
+    typeof socialSignInQuerySchema
 >;
 
 export async function socialSignInApi(
-  params: SocialSignInParamsSchema
+  query: SocialSignInParamsSchema
 ): Promise<SocialSignInResponseSchema> {
   const response = await apiClient.get<SocialSignInResponseSchema>(
-      `/auth/social/${params.provider}`
+      `/auth/social`,
+      query,
+      {
+        headers: {
+          "No-Auth": true,
+        }
+      }
   );
   return response.data;
 }
