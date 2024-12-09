@@ -90,7 +90,7 @@ export const postSchema = z.discriminatedUnion("type", [
 
 export const basePostRequestSchema = basePostSchema
   .omit({
-    // id: true,
+    id: true,
     ownerId: true,
     createdAt: true,
     updatedAt: true,

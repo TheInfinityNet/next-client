@@ -48,7 +48,7 @@ export default function EditUserProfileForm({
   const { toast } = useToast();
   const editProfileMutation = useEditProfileMutation();
   const userProfileDetailsQuery = useSuspenseQuery(
-    createGetUserProfileDetailsQueryOptions({ userId })
+    createGetUserProfileDetailsQueryOptions({ userId }),
   );
 
   const editUserProfileForm = useForm<EditUserProfileSchema>({
@@ -77,7 +77,7 @@ export default function EditUserProfileForm({
           case "ValidationError":
             mapFieldErrorToFormError(
               editUserProfileForm.setError,
-              error.errors
+              error.errors,
             );
         }
       },
@@ -125,13 +125,13 @@ export default function EditUserProfileForm({
               control={editUserProfileForm.control}
               name="lastName"
               render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Last name</FormLabel>
-                      <FormControl>
-                          <Input placeholder="Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                  </FormItem>
+                <FormItem>
+                  <FormLabel>Last name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
             <FormField
@@ -171,19 +171,6 @@ export default function EditUserProfileForm({
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-            <FormField
-              control={editUserProfileForm.control}
-              name="birthdate"
-              render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Birth date</FormLabel>
-                      <FormControl>
-                          <Input placeholder="Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                  </FormItem>
               )}
             />
             <CardFooter className="flex justify-between">

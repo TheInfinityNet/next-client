@@ -3,6 +3,7 @@ import { PostCard } from "../_components/post-card";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { createGetTimelinePostsInfinityQueryOptions } from "@/hooks/queries/get-timeline-posts.query";
 import { useCallback, useRef } from "react";
+import { PostComposer } from "../_components/post-composer";
 
 export function PostTimelineList() {
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading } =
@@ -40,24 +41,11 @@ export function PostTimelineList() {
     </div>
   );
 }
-
 export default function Home() {
-  const comments = [
-    {
-      id: 1,
-      author: "Tuan Hao",
-      avatarUrl: "https://via.placeholder.com/150",
-      content: "Great post! Thanks for sharing.",
-      timeAgo: "1 hour ago",
-    },
-    {
-      id: 2,
-      author: "Minh Anh",
-      avatarUrl: "https://via.placeholder.com/150",
-      content: "Really helpful content!",
-      timeAgo: "2 hours ago",
-    },
-  ];
-
-  return <PostTimelineList />;
+  return (
+    <>
+      <PostComposer />
+      <PostTimelineList />
+    </>
+  );
 }
