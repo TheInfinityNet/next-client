@@ -30,12 +30,15 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
+
 } from "@/components/ui/command";
 import { Image, Video, Users, MapPin, TagIcon, X } from "lucide-react";
 import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { useUploadVideoMutation } from "@/lib/api/apis/upload-video.api";
 import { useUploadFileMutation } from "@/lib/api/apis/upload-file.api";
+import {toast} from "@/hooks/use-toast";
+import {mapFieldErrorToFormError} from "@/lib/utils";
+import {useCurrentProfileActions} from "@/hooks/use-current-profile-store";
 
 export function PostComposer() {
   const photoUploadButtonRef = useRef<HTMLInputElement>(null);
@@ -59,6 +62,7 @@ export function PostComposer() {
     control,
     handleSubmit,
     setValue,
+    setError,
     watch,
     formState: { errors },
   } = useForm<CreatePostBodySchema>({
@@ -80,8 +84,20 @@ export function PostComposer() {
         setValue("content.text", "");
         setValue("aggregates", []);
         setMediaUrls({});
+        toast({
+          title: "Create post succeeded"
+        });
       },
-      onError: () => {},
+      onError: (error) => {
+        toast({
+          title: "Create post failed",
+          description: error.message,
+        });
+        switch (error.type) {
+          case "ValidationError":
+            mapFieldErrorToFormError(setError, error.errors);
+        }
+      },
     });
 
   const handleMediaChange = (
@@ -267,14 +283,16 @@ export function PostComposer() {
 
   const handleRemoveTag = (friendId: string) => {};
 
+  const currentProfile = useCurrentProfileActions().getCurrentProfile();
+
   return (
     <Card className="w-full overflow-hidden">
       <CardContent className="p-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="flex items-start space-x-4">
             <Avatar className="w-10 h-10">
-              <AvatarImage src="/avatars/user-avatar.jpg" alt="User" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage src={currentProfile?.avatar?.url} alt="@shadcn" />
+              <AvatarFallback>{currentProfile?.name ?? "U"}</AvatarFallback>
             </Avatar>
             <div className="flex-grow">
               <Controller

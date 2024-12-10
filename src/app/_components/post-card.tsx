@@ -31,6 +31,8 @@ import { createContext, useContext, useState } from "react";
 import { PostReactionTypeSchema } from "@/lib/api/schemas/post-reaction.schema";
 import { PostReactionCounts } from "./post-reaction-counts";
 import { CommentList } from "./comment-list";
+import {PostActionsDropdown} from "@/app/_components/post-actions-dropdown";
+import {CommentDialog} from "@/app/_components/comment-form";
 
 type PostCardProps = {
   post: PostResponseSchema;
@@ -83,7 +85,10 @@ export function useReaction() {
 }
 
 export function PostCard({ post }: PostCardProps) {
+  const [isCommentDialogOpen, setCommentDialogOpen] = useState(false);
+
   return (
+      <>
     <ReactionProvider
       initialReactionCounts={post.reactionCounts}
       initialReaction={post.reaction}
@@ -123,24 +128,7 @@ export function PostCard({ post }: PostCardProps) {
             </div>
           </div>
           <div className="ml-auto">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  className="rounded-full"
-                  size={"icon"}
-                  variant={"ghost"}
-                >
-                  <EllipsisIcon />
-                  <span className="sr-only">Actions</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Turn on notifications</DropdownMenuItem>
-                <DropdownMenuItem>Turn off notifications</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Report</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <PostActionsDropdown postId={post.id} />
           </div>
         </CardHeader>
         <CardContent>
@@ -225,7 +213,11 @@ export function PostCard({ post }: PostCardProps) {
           <div className="flex flex-col w-full items-start space-y-2">
             <div className="flex w-full justify-between">
               <PostReactionButton postId={post.id} />
-              <Button className="w-full" variant={"ghost"}>
+              <Button
+                  className="w-full"
+                  variant={"ghost"}
+                  onClick={() => setCommentDialogOpen(true)}
+              >
                 <MessageCircleIcon />
                 Comment
               </Button>
@@ -240,5 +232,14 @@ export function PostCard({ post }: PostCardProps) {
         </CardFooter>
       </Card>
     </ReactionProvider>
+
+        {/* Dialog Nhập Bình Luận */}
+        {isCommentDialogOpen && (
+            <CommentDialog
+                postId={post.id}
+                onClose={() => setCommentDialogOpen(false)}
+            />
+        )}
+        </>
   );
 }

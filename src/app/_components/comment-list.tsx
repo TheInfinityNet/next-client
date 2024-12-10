@@ -85,7 +85,7 @@ type CommentListProps = {
 };
 
 export function CommentList({ postId, commentId }: CommentListProps) {
-  const [toggle, setToggle] = useState(true);
+  const [toggle, setToggle] = useState(false);
 
   const { data, fetchNextPage, hasNextPage, isFetching, isLoading, isError } =
     useInfiniteQuery(

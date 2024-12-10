@@ -79,3 +79,7 @@ export const pageProfileResponseSchema = baseProfileResponseSchema.extend({
   type: z.literal("Page"),
   description: z.string(),
 });
+
+export type BaseProfileResponseSchema = z.infer<
+    typeof baseProfileResponseSchema
+>;

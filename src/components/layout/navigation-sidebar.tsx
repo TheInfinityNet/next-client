@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { useCurrentUserProfile } from "@/hooks/use-current-user-profile-store";
+import { useCurrentProfile } from "@/hooks/use-current-profile-store";
 
 interface NavItem {
   title: string;
@@ -59,13 +59,13 @@ const navItems: NavItem[] = [
 export const NavigationSidebar: React.FC<{ collapsable?: boolean }> = ({
   collapsable,
 }) => {
-  const currentUserProfile = useCurrentUserProfile();
+  const currentProfile = useCurrentProfile();
 
   return (
     <nav className="grid">
       {navItems.map(
         ({ title, href, icon: Icon, requiresAuth, hideOnDesktop }) => {
-          const isAuthDisabled = requiresAuth && !currentUserProfile;
+          const isAuthDisabled = requiresAuth && !currentProfile;
 
           return (
             <Button
