@@ -91,6 +91,31 @@ export function PostComposer() {
   ) => {
     const currentMedia = watch("aggregates") || [];
 
+    if (currentMedia.length === 0) {
+      const photoId = watch("photoId");
+      const videoId = watch("videoId");
+      if (videoId) {
+        currentMedia.push({
+          type: "Video",
+          videoId,
+          content: { text: "", facets: [] },
+          audience: {
+            type: "Public",
+          },
+        });
+      }
+      if (photoId) {
+        currentMedia.push({
+          type: "Photo",
+          photoId,
+          content: { text: "", facets: [] },
+          audience: {
+            type: "Public",
+          },
+        });
+      }
+    }
+
     setMediaUrls((prev) => ({ ...prev, [id]: { url, type } }));
 
     if (currentMedia.length === 0 || type === "File") {
@@ -171,6 +196,15 @@ export function PostComposer() {
 
     if (updatedMedia.length === 0) {
       setValue("type", "Text");
+      setValue("aggregates", []);
+    } else if (updatedMedia.length === 1) {
+      const singleMedia = updatedMedia[0];
+      setValue("type", singleMedia.type);
+      if (singleMedia.type === "Photo" && singleMedia.photoId) {
+        setValue("photoId", singleMedia.photoId);
+      } else if (singleMedia.type === "Video" && singleMedia.videoId) {
+        setValue("videoId", singleMedia.videoId);
+      }
       setValue("aggregates", []);
     } else if (updatedMedia.length === 1) {
       const singleMedia = updatedMedia[0];
