@@ -216,5 +216,13 @@ export const postResponseSchema = z.discriminatedUnion("type", [
   multiMediaPostResponseSchema,
 ]);
 
+export const getPostParamsSchema = z.object({
+  id: z.string(),
+});
+
+export type GetPostParamsSchema = z.infer<
+    typeof getPostParamsSchema
+>;
+
 export type PostResponseSchema = z.infer<typeof postResponseSchema>;
 export type PostRequestSchema = z.infer<typeof postRequestSchema>;

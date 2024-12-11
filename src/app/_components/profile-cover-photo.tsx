@@ -23,6 +23,9 @@ import { Button } from "@/components/ui/button";
 import { CameraIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
 import { ActionGuard } from "@/components/layout/action-guard";
+import {useUploadPhotoMutation} from "@/lib/api/apis/upload-photo.api";
+import {useUploadAvatarMutation, useUploadCoverMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
+import {toast} from "@/hooks/use-toast";
 
 export type ProfileCoverPhotoProps = {
   profileId: string;
@@ -42,6 +45,9 @@ export function ProfileCoverPhoto({
   const actions = profileActionsQuery.data;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const uploadPhotoMutation = useUploadPhotoMutation();
+  const uploadCoverPhotoMutation = useUploadCoverMutation();
+
   const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -49,11 +55,48 @@ export function ProfileCoverPhoto({
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      // Handle file upload logic here
-      console.log("Selected file:", file);
-    }
+    const files = event.target.files;
+
+    if (!files) return;
+
+    const fileArray = Array.from(files);
+
+    fileArray.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        uploadPhotoMutation.mutate(
+            { photo: file },
+            {
+              onSuccess: (data) => {
+                toast({
+                  title: "Upload cover succeeded"
+                });
+                uploadCoverPhotoMutation.mutate(
+                    { photoId: data.id },
+                    {
+                      onSuccess: (data) => {
+                        toast({
+                          title: "Upload cover succeeded"
+                        });
+                      },
+                      onError: (error) => {
+                        toast({
+                          title: "Upload cover failed",
+                          description: error.message,
+                        });
+                      },
+                    },
+                );
+              },
+              onError: (error) => {
+                toast({
+                  title: "Upload cover failed",
+                  description: error.message,
+                });
+              },
+            },
+        );
+      }
+    });
   };
 
   return (

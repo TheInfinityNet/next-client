@@ -47,7 +47,7 @@ export function useCreatePostMutation() {
     CreatePostBodySchema
   >({
     mutationKey: ["create-post"],
-    mutationFn: (params) => createPostApi(params),
+    mutationFn: (body) => createPostApi(body),
     throwOnError: (error) => isAxiosError(error),
   });
 }

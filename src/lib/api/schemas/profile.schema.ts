@@ -80,6 +80,22 @@ export const pageProfileResponseSchema = baseProfileResponseSchema.extend({
   description: z.string(),
 });
 
+export const uploadPhotoProfileRequestSchema = z.object({
+  photoId: z.string().uuid(),
+});
+
+export const uploadPhotoProfileResponseSchema = z.object({
+  message: z.string(),
+});
+
+export type UploadPhotoProfileRequestSchema = z.infer<
+    typeof uploadPhotoProfileRequestSchema
+>;
+
+export type UploadPhotoProfileResponseSchema = z.infer<
+    typeof uploadPhotoProfileResponseSchema
+>;
+
 export type BaseProfileResponseSchema = z.infer<
     typeof baseProfileResponseSchema
 >;
