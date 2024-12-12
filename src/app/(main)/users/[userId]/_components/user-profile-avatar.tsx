@@ -1,7 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { CameraIcon } from "lucide-react";
 import { useRef, type ChangeEvent } from "react";
 import {useUploadAvatarMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
@@ -56,13 +55,11 @@ export default function UserProfileAvatar({
       );
     }
   };
-
-  const uploadPhotoMutation = useUploadPhotoMutation();
   const uploadAvatarPhotoMutation = useUploadAvatarMutation();
 
     const handleUploadClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
+        if (changeAvatarInputRef.current) {
+            changeAvatarInputRef.current.click();
         }
     };
 
