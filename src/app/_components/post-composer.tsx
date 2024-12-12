@@ -30,12 +30,15 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
+
 } from "@/components/ui/command";
 import { Image, Video, Users, MapPin, TagIcon, X } from "lucide-react";
 import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { useUploadVideoMutation } from "@/lib/api/apis/upload-video.api";
 import { useUploadFileMutation } from "@/lib/api/apis/upload-file.api";
+import {toast} from "@/hooks/use-toast";
+import {mapFieldErrorToFormError} from "@/lib/utils";
+import {useCurrentProfileActions} from "@/hooks/use-current-profile-store";
 
 export function PostComposer() {
   const photoUploadButtonRef = useRef<HTMLInputElement>(null);
@@ -59,6 +62,7 @@ export function PostComposer() {
     control,
     handleSubmit,
     setValue,
+    setError,
     watch,
     formState: { errors },
   } = useForm<CreatePostBodySchema>({
@@ -80,8 +84,20 @@ export function PostComposer() {
         setValue("content.text", "");
         setValue("aggregates", []);
         setMediaUrls({});
+        toast({
+          title: "Create post succeeded"
+        });
       },
-      onError: () => {},
+      onError: (error) => {
+        toast({
+          title: "Create post failed",
+          description: error.message,
+        });
+        switch (error.type) {
+          case "ValidationError":
+            mapFieldErrorToFormError(setError, error.errors);
+        }
+      },
     });
 
   const handleMediaChange = (
@@ -206,15 +222,6 @@ export function PostComposer() {
         setValue("videoId", singleMedia.videoId);
       }
       setValue("aggregates", []);
-    } else if (updatedMedia.length === 1) {
-      const singleMedia = updatedMedia[0];
-      setValue("type", singleMedia.type);
-      if (singleMedia.type === "Photo" && singleMedia.photoId) {
-        setValue("photoId", singleMedia.photoId);
-      } else if (singleMedia.type === "Video" && singleMedia.videoId) {
-        setValue("videoId", singleMedia.videoId);
-      }
-      setValue("aggregates", []);
     } else {
       setValue("type", "MultiMedia");
       setValue("aggregates", updatedMedia);
@@ -263,167 +270,224 @@ export function PostComposer() {
     });
   };
 
+  const handleUpdateMediaCaption = (id: string, caption: string) => {
+    const currentMedia = watch("aggregates") || [];
+
+    const updatedMedia = currentMedia.map((media) => {
+      if (
+          (media.type === "Photo" && media.photoId === id) ||
+          (media.type === "Video" && media.videoId === id)
+      ) {
+        return {
+          ...media,
+          content: {
+            ...media.content,
+            text: caption,
+            facets: media.content?.facets || [], // Đảm bảo facets không undefined
+          },
+        };
+      }
+      return media;
+    });
+
+    setValue("aggregates", updatedMedia, { shouldDirty: true });
+  };
+
   const handleTagFriend = (friendId: string) => {};
 
   const handleRemoveTag = (friendId: string) => {};
 
-  return (
-    <Card className="w-full overflow-hidden">
-      <CardContent className="p-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="flex items-start space-x-4">
-            <Avatar className="w-10 h-10">
-              <AvatarImage src="/avatars/user-avatar.jpg" alt="User" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-            <div className="flex-grow">
-              <Controller
-                name="content.text"
-                control={control}
-                render={({ field }) => (
-                  <Textarea
-                    {...field}
-                    placeholder="What's on your mind?"
-                    className="w-full min-h-[100px] text-lg border-none resize-none focus:ring-0"
-                  />
-                )}
-              />
-            </div>
-          </div>
+  const currentProfile = useCurrentProfileActions().getCurrentProfile();
 
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-            <div className="text-sm font-semibold text-gray-500">
-              Add to your post
+  return (
+      <Card className="w-full overflow-hidden">
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Phần nhập nội dung bài viết */}
+            <div className="flex items-start space-x-4">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={currentProfile?.avatar?.url} alt="@shadcn" />
+                <AvatarFallback>{currentProfile?.name ?? "U"}</AvatarFallback>
+              </Avatar>
+              <div className="flex-grow">
+                <Controller
+                    name="content.text"
+                    control={control}
+                    render={({ field }) => (
+                        <Textarea
+                            {...field}
+                            placeholder="What's on your mind?"
+                            className="w-full min-h-[100px] text-lg border-none resize-none focus:ring-0"
+                        />
+                    )}
+                />
+              </div>
             </div>
-            <div className="flex space-x-2">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-green-500"
-                onClick={() => photoUploadButtonRef.current?.click()}
-              >
-                <Image className="w-6 h-6" />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-blue-500"
-                onClick={() => videoUploadButtonRef.current?.click()}
-              >
-                <Video className="w-6 h-6" />
-              </Button>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
+
+            {/* Phần chọn media */}
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="text-sm font-semibold text-gray-500">Add to your post</div>
+              <div className="flex space-x-2">
+                <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="text-yellow-500"
-                  >
-                    <TagIcon className="w-6 h-6" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-64 p-0">
-                  <Command>
-                    <CommandInput placeholder="Search friends..." />
-                    <CommandEmpty>No friend found.</CommandEmpty>
-                    <CommandGroup></CommandGroup>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                    className="text-green-500"
+                    onClick={() => photoUploadButtonRef.current?.click()}
+                >
+                  <Image className="w-6 h-6" />
+                </Button>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-blue-500"
+                    onClick={() => videoUploadButtonRef.current?.click()}
+                >
+                  <Video className="w-6 h-6" />
+                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="text-yellow-500"
+                    >
+                      <TagIcon className="w-6 h-6" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-64 p-0">
+                    <Command>
+                      <CommandInput placeholder="Search friends..." />
+                      <CommandEmpty>No friend found.</CommandEmpty>
+                      <CommandGroup></CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-500"
+                >
+                  <MapPin className="w-6 h-6" />
+                </Button>
+              </div>
+            </div>
+
+            {/* Phần chọn audience */}
+            <div className="flex items-center justify-between">
+              <Controller
+                  name="audience.type"
+                  control={control}
+                  render={({ field }) => (
+                      <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-[140px]">
+                          <SelectValue placeholder="Audience" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Public">Public</SelectItem>
+                          <SelectItem value="Friend">Friend</SelectItem>
+                          <SelectItem value="OnlyMe">Only me</SelectItem>
+                          <SelectItem value="Include">Include</SelectItem>
+                          <SelectItem value="Exclude">Exclude</SelectItem>
+                          <SelectItem value="Custom">Custom</SelectItem>
+                        </SelectContent>
+                      </Select>
+                  )}
+              />
               <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-red-500"
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
               >
-                <MapPin className="w-6 h-6" />
+                Post
               </Button>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <Controller
-              name="audience.type"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger className="w-[140px]">
-                    <SelectValue placeholder="Audience" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Public">Public</SelectItem>
-                    <SelectItem value="Friend">Friend</SelectItem>
-                    <SelectItem value="OnlyMe">Only me</SelectItem>
-                    <SelectItem value="Include">Include</SelectItem>
-                    <SelectItem value="Exclude">Exclude</SelectItem>
-                    <SelectItem value="Custom">Custom</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-
+            {/* Phần hiển thị media preview */}
             {Object.entries(mediaUrls).length > 0 && (
-              <div className="grid grid-cols-2 gap-2">
-                {Object.entries(mediaUrls).map(([id, media]) => (
-                  <div key={id} className="relative w-20 h-20">
-                    {media.type === "Photo" ? (
-                      <img
-                        src={media.url}
-                        alt="Media"
-                        className="object-cover w-full h-full rounded-lg"
-                      />
-                    ) : media.type === "Video" ? (
-                      <video
-                        src={media.url}
-                        className="object-cover w-full h-full rounded-lg"
-                        controls
-                      />
-                    ) : null}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
-                      onClick={() => handleRemoveMedia(id)}
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
+                <div
+                    className={`grid ${
+                        Object.entries(mediaUrls).length === 1
+                            ? "grid-cols-1"
+                            : "grid-cols-2 gap-4"
+                    } mt-4`}
+                >
+                  {Object.entries(mediaUrls).map(([id, media]) => (
+                      <div key={id} className="relative flex flex-col space-y-2">
+                        <div
+                            className={`relative w-full ${
+                                Object.entries(mediaUrls).length === 1 ? "h-80" : "h-40"
+                            }`}
+                        >
+                          {media.type === "Photo" ? (
+                              <img
+                                  src={media.url}
+                                  alt="Media"
+                                  className="object-cover w-full h-full rounded-lg"
+                              />
+                          ) : media.type === "Video" ? (
+                              <video
+                                  src={media.url}
+                                  className="object-cover w-full h-full rounded-lg"
+                                  controls
+                              />
+                          ) : null}
+                          <Button
+                              variant="ghost"
+                              size="sm"
+                              className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                              onClick={() => handleRemoveMedia(id)}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+
+                        {/* Hiển thị Textarea nếu có từ 2 media trở lên */}
+                        {Object.entries(mediaUrls).length > 1 && (
+                            <Textarea
+                                placeholder="Add a caption..."
+                                className="w-full text-sm border rounded-md resize-none"
+                                rows={2}
+                                value={(() => {
+                                  const media = watch("aggregates")?.find(
+                                      (media) =>
+                                          (media.type === "Photo" && media.photoId === id) ||
+                                          (media.type === "Video" && media.videoId === id)
+                                  );
+                                  return media?.content?.text || ""; // Giá trị mặc định
+                                })()}
+                                onChange={(e) => handleUpdateMediaCaption(id, e.target.value)}
+                            />
+                        )}
+                      </div>
+                  ))}
+                </div>
             )}
 
-            <Button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-            >
-              Post
-            </Button>
-          </div>
-
-          <input
-            type="file"
-            id="image-upload"
-            ref={photoUploadButtonRef}
-            accept="image/*"
-            className="hidden"
-            onChange={handleMediaUpload}
-          />
-          <input
-            type="file"
-            id="video-upload"
-            ref={videoUploadButtonRef}
-            accept="video/*"
-            className="hidden"
-            onChange={handleMediaUpload}
-          />
-        </form>
-      </CardContent>
-    </Card>
+            {/* Hidden file inputs */}
+            <input
+                type="file"
+                id="image-upload"
+                ref={photoUploadButtonRef}
+                accept="image/*"
+                className="hidden"
+                onChange={handleMediaUpload}
+            />
+            <input
+                type="file"
+                id="video-upload"
+                ref={videoUploadButtonRef}
+                accept="video/*"
+                className="hidden"
+                onChange={handleMediaUpload}
+            />
+          </form>
+        </CardContent>
+      </Card>
   );
 }

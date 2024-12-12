@@ -1,11 +1,12 @@
 import { apiClient } from "../client";
-import { postSchema } from "../schemas/post.schema";
+import {GetPostParamsSchema, PostResponseSchema} from "@/lib/api/schemas/post.schema";
 
-export async function getPostById(postId: string): Promise<typeof postSchema | null> {
-  try {
-    const response = await apiClient.get<typeof postSchema>(`/posts/${postId}`);
-    return response.data;
-  } catch (error) {
-    return null;
-  }
+export async function getPostApi(
+    params: GetPostParamsSchema,
+): Promise<PostResponseSchema> {
+  const response = await apiClient.get<
+      PostResponseSchema
+  >(`/posts/${params.id}`, {
+  });
+  return response.data;
 }

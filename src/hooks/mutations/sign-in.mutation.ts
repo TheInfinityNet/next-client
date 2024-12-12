@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import { useTokenActions } from "../use-token-store";
-import { useCurrentUserProfileActions } from "../use-current-user-profile-store";
+import { useCurrentProfileActions } from "../use-current-profile-store";
 import {
   SignInErrorResponseSchema,
   SignInRequestSchema,
@@ -12,7 +12,7 @@ import { signInApi } from "@/lib/api/apis/sign-in.api";
 export function useSignInMutation() {
   const client = useQueryClient();
   const { setAccessToken, setRefreshToken } = useTokenActions();
-  const { setCurrentUserProfile } = useCurrentUserProfileActions();
+  const { setCurrentProfile } = useCurrentProfileActions();
 
   return useMutation<
     SignInResponseSchema,
@@ -24,10 +24,11 @@ export function useSignInMutation() {
     onSuccess(data) {
       setAccessToken(data.tokens.accessToken);
       setRefreshToken(data.tokens.refreshToken);
-      setCurrentUserProfile(data.user);
+      setCurrentProfile(data.user);
       client.invalidateQueries({
         queryKey: ["current-user-profile"],
       });
+      setCurrentProfile(data.user);
     },
     throwOnError: (error) => isAxiosError(error),
   });

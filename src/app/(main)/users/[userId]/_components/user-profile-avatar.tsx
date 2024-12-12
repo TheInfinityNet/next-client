@@ -2,6 +2,10 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CameraIcon } from "lucide-react";
 import { useRef } from "react";
+import {useUploadAvatarMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
+import {useUploadPhotoMutation} from "@/lib/api/apis/upload-photo.api";
+import {toast} from "@/hooks/use-toast";
+import {mapFieldErrorToFormError} from "@/lib/utils";
 
 type UserProfileAvatarProps = {
   userProfile: {
@@ -15,10 +19,62 @@ type UserProfileAvatarProps = {
 
 export default function UserProfileAvatar({
   userProfile,
-  handleUploadClick,
-  handleFileChange,
 }: UserProfileAvatarProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const uploadPhotoMutation = useUploadPhotoMutation();
+  const uploadAvatarPhotoMutation = useUploadAvatarMutation();
+
+    const handleUploadClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+
+        if (!files) return;
+
+        const fileArray = Array.from(files);
+
+        fileArray.forEach((file) => {
+            if (file.type.startsWith("image/")) {
+                uploadPhotoMutation.mutate(
+                    { photo: file },
+                    {
+                        onSuccess: (data) => {
+                            toast({
+                                title: "Upload avatar succeeded"
+                            });
+                            uploadAvatarPhotoMutation.mutate(
+                                { photoId: data.id },
+                                {
+                                    onSuccess: (data) => {
+                                        toast({
+                                            title: "Upload avatar succeeded"
+                                        });
+                                    },
+                                    onError: (error) => {
+                                        toast({
+                                            title: "Upload avatar failed",
+                                            description: error.message,
+                                        });
+                                    },
+                                },
+                            );
+                        },
+                        onError: (error) => {
+                            toast({
+                                title: "Upload avatar failed",
+                                description: error.message,
+                            });
+                        },
+                    },
+                );
+            }
+        });
+    };
 
   return (
     <div className="relative">

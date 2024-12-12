@@ -14,3 +14,8 @@ export const profileActionsSchema = z.enum([
   "ProfileDelete",
   "ProfileCreate",
 ]);
+
+export const postActionsSchema = z.enum([
+  "PostEdit",
+  "PostDelete",
+]);
