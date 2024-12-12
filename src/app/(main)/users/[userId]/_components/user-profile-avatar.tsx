@@ -5,7 +5,6 @@ import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { CameraIcon } from "lucide-react";
 import { useRef, type ChangeEvent } from "react";
 import {useUploadAvatarMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
-import {useUploadPhotoMutation} from "@/lib/api/apis/upload-photo.api";
 import {toast} from "@/hooks/use-toast";
 import {mapFieldErrorToFormError} from "@/lib/utils";
 
@@ -24,8 +23,6 @@ export default function UserProfileAvatar({
 }: UserProfileAvatarProps) {
   const { toast } = useToast();
   const changeAvatarInputRef = useRef<HTMLInputElement>(null);
-
-  const uploadPhotoMutation = useUploadPhotoMutation();
 
   const onChangeAvatar = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,8 +58,8 @@ export default function UserProfileAvatar({
   const uploadAvatarPhotoMutation = useUploadAvatarMutation();
 
     const handleUploadClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
+        if (changeAvatarInputRef.current) {
+            changeAvatarInputRef.current.click();
         }
     };
 
