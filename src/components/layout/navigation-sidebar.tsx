@@ -65,7 +65,7 @@ export const NavigationSidebar: React.FC<{ collapsable?: boolean }> = ({
     <nav className="grid">
       {navItems.map(
         ({ title, href, icon: Icon, requiresAuth, hideOnDesktop }) => {
-          const isAuthDisabled = requiresAuth && !currentProfile;
+          const isAuthDisabled = false;
 
           return (
             <Button
