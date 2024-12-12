@@ -6,15 +6,15 @@ export const socialSignInQuerySchema = z.object({
   provider: z.enum(["Google", "Facebook"]),
 });
 
-export type SocialSignInParamsSchema = z.infer<
+export type SocialSignInQuerySchema = z.infer<
     typeof socialSignInQuerySchema
 >;
 
 export async function socialSignInApi(
-  query: SocialSignInParamsSchema
+  query: SocialSignInQuerySchema
 ): Promise<SocialSignInResponseSchema> {
   const response = await apiClient.get<SocialSignInResponseSchema>(
-      `/auth/social`,
+      '/auth/social',
       query,
       {
         headers: {

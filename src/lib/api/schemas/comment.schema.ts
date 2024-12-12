@@ -1,10 +1,18 @@
 import { z } from "zod";
 import { baseProfileResponseSchema } from "./profile.schema";
-import { textContentSchema } from "./text-content.schema";
+import {textContentRequestSchema, textContentSchema} from "./text-content.schema";
 import {
   commentReactionCountsResponseSchema,
   commentReactionTypeSchema,
 } from "./comment-reaction.schema";
+import {postAudienceRequestSchema} from "@/lib/api/schemas/post-audience.schema";
+import {createPostBaseRequestSchema} from "@/lib/api/schemas/create-post.schema";
+import {
+  audioPostRequestSchema, filePostRequestSchema, multiMediaPostRequestSchema,
+  photoPostRequestSchema, sharePostRequestSchema,
+  textPostRequestSchema,
+  videoPostRequestSchema
+} from "@/lib/api/schemas/post.schema";
 
 export const baseCommentSchema = z.object({
   id: z.coerce.string().uuid(),
@@ -33,4 +41,25 @@ export const commentResponseSchema = baseCommentSchema
     reaction: commentReactionTypeSchema.optional(),
   });
 
+export const commentBaseRequestSchema = z.object({
+  postId: z.coerce.string().uuid(),
+  content: textContentRequestSchema,
+});
+
+export const textCommentRequestSchema = commentBaseRequestSchema.extend({
+  type: z.literal("Text"),
+});
+export const photoCommentRequestSchema = commentBaseRequestSchema.extend({
+  type: z.literal("Photo"),
+  photoId: z.string().uuid(),
+});
+export const videoCommentRequestSchema = commentBaseRequestSchema.extend({
+  type: z.literal("Video"),
+  videoId: z.string().uuid(),
+});
+export const commentRequestSchema = z.discriminatedUnion("type", [
+  textCommentRequestSchema,
+  photoCommentRequestSchema,
+  videoCommentRequestSchema,
+]);
 export type CommentResponseSchema = z.infer<typeof commentResponseSchema>;

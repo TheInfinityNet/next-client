@@ -100,10 +100,6 @@ export default function SignInPage() {
     }
 
     if (data) {
-      toast({
-        title: "Sign-in successful",
-        description: `Redirecting to ${data.url}`,
-      });
       window.location.href = data.url;
     }
   };

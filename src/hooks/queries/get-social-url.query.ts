@@ -9,9 +9,7 @@ export function useSocialSignIn(provider: string) {
             `Invalid provider: ${provider}. Must be "Google" or "Facebook".`
         );
     }
-
     const params = parsed.data;
-
     return useQuery({
         queryKey: ["social-sign-in", params],
         queryFn: () => socialSignInApi(params),

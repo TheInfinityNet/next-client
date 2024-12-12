@@ -90,7 +90,7 @@ export const postSchema = z.discriminatedUnion("type", [
 
 export const basePostRequestSchema = basePostSchema
   .omit({
-    // id: true,
+    id: true,
     ownerId: true,
     createdAt: true,
     updatedAt: true,
@@ -215,6 +215,14 @@ export const postResponseSchema = z.discriminatedUnion("type", [
   sharePostResponseSchema,
   multiMediaPostResponseSchema,
 ]);
+
+export const getPostParamsSchema = z.object({
+  id: z.string(),
+});
+
+export type GetPostParamsSchema = z.infer<
+    typeof getPostParamsSchema
+>;
 
 export type PostResponseSchema = z.infer<typeof postResponseSchema>;
 export type PostRequestSchema = z.infer<typeof postRequestSchema>;

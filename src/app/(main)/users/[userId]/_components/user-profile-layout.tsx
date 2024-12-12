@@ -114,13 +114,13 @@ export function UserProfileLayout({
               <ProfileFriendsSummaryPreview userId={userId} />
             </div>
             <div className="flex flex-wrap gap-2 justify-center md:justify-end items-end mt-auto">
-              <Button
-                variant={"default"}
-                className="flex-grow sm:flex-none"
-                aria-label="Add to post"
-              >
-                <PlusIcon /> Add to Post
-              </Button>
+              {/*<Button*/}
+              {/*  variant={"default"}*/}
+              {/*  className="flex-grow sm:flex-none"*/}
+              {/*  aria-label="Add to post"*/}
+              {/*>*/}
+              {/*  <PlusIcon /> Add to Post*/}
+              {/*</Button>*/}
               <Link href={`/users/${userId}/edit-profile#edit-form`} passHref>
                 <Button
                   variant={"secondary"}

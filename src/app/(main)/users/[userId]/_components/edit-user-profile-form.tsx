@@ -48,7 +48,7 @@ export default function EditUserProfileForm({
   const { toast } = useToast();
   const editProfileMutation = useEditProfileMutation();
   const userProfileDetailsQuery = useSuspenseQuery(
-    createGetUserProfileDetailsQueryOptions({ userId })
+    createGetUserProfileDetailsQueryOptions({ userId }),
   );
 
   const editUserProfileForm = useForm<EditUserProfileSchema>({
@@ -77,7 +77,7 @@ export default function EditUserProfileForm({
           case "ValidationError":
             mapFieldErrorToFormError(
               editUserProfileForm.setError,
-              error.errors
+              error.errors,
             );
         }
       },

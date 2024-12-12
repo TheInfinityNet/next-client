@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { tokenSchema } from "./tokens.schema";
-import { userProfileResponseSchema } from "./user-profile.schema";
 import { validationErrorResponseSchema } from "./error.schema";
+import {baseProfileResponseSchema} from "@/lib/api/schemas/profile.schema";
 
 export const signInRequestSchema = z.object({
   email: z.coerce.string().email().min(1),
@@ -9,7 +9,7 @@ export const signInRequestSchema = z.object({
 });
 export const signInResponseSchema = z.object({
   tokens: z.lazy(() => tokenSchema),
-  user: z.lazy(() => userProfileResponseSchema),
+  user: z.lazy(() => baseProfileResponseSchema),
 });
 export const signInErrorResponseSchema = z.discriminatedUnion("type", [
   validationErrorResponseSchema,
