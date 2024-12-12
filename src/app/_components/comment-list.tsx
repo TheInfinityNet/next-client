@@ -12,6 +12,7 @@ import { useState } from "react";
 import { CommentReactionButton } from "./comment-reaction-button";
 import { ReactionProvider } from "./post-card";
 import { CommentReactionCounts } from "./comment-reaction-count";
+import Link from "next/link";
 
 export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
   const [showReplies, setShowReplies] = useState(false);
@@ -38,7 +39,18 @@ export function CommentCard({ comment }: { comment: CommentResponseSchema }) {
           </Avatar>
           <div className="flex-1">
             <div className="flex-col rounded-xl bg-muted p-2 w-fit relative">
-              <div className="font-bold">{comment.owner.name}</div>
+              <div className="font-bold">
+                <Link
+                  href={
+                    comment.owner.type === "User"
+                      ? `/users/${comment.owner.id}`
+                      : `/pages/${comment.owner.id}`
+                  }
+                  prefetch={false}
+                >
+                  {comment.owner.name}
+                </Link>
+              </div>
               <p>{comment.content.text}</p>
               <CommentReactionCounts commentId={comment.id} />
             </div>

@@ -23,9 +23,12 @@ import { Button } from "@/components/ui/button";
 import { CameraIcon, PencilIcon, TrashIcon } from "lucide-react";
 import { createGetProfileActionsQueryOptions } from "@/hooks/queries/get-profile-actions.query";
 import { ActionGuard } from "@/components/layout/action-guard";
-import {useUploadPhotoMutation} from "@/lib/api/apis/upload-photo.api";
-import {useUploadAvatarMutation, useUploadCoverMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
-import {toast} from "@/hooks/use-toast";
+import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
+import {
+  useUploadAvatarMutation,
+  useUploadCoverMutation,
+} from "@/hooks/mutations/upload-photo-profile.mutation";
+import { toast } from "@/hooks/use-toast";
 
 export type ProfileCoverPhotoProps = {
   profileId: string;
@@ -40,7 +43,7 @@ export function ProfileCoverPhoto({
   const profileActionsQuery = useQuery(
     createGetProfileActionsQueryOptions({
       profileId,
-    })
+    }),
   );
   const actions = profileActionsQuery.data;
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,36 +67,36 @@ export function ProfileCoverPhoto({
     fileArray.forEach((file) => {
       if (file.type.startsWith("image/")) {
         uploadPhotoMutation.mutate(
-            { photo: file },
-            {
-              onSuccess: (data) => {
-                toast({
-                  title: "Upload cover succeeded"
-                });
-                uploadCoverPhotoMutation.mutate(
-                    { photoId: data.id },
-                    {
-                      onSuccess: (data) => {
-                        toast({
-                          title: "Upload cover succeeded"
-                        });
-                      },
-                      onError: (error) => {
-                        toast({
-                          title: "Upload cover failed",
-                          description: error.message,
-                        });
-                      },
-                    },
-                );
-              },
-              onError: (error) => {
-                toast({
-                  title: "Upload cover failed",
-                  description: error.message,
-                });
-              },
+          { photo: file },
+          {
+            onSuccess: (data) => {
+              toast({
+                title: "Upload cover succeeded",
+              });
+              uploadCoverPhotoMutation.mutate(
+                { photoId: data.id },
+                {
+                  onSuccess: (data) => {
+                    toast({
+                      title: "Upload cover succeeded",
+                    });
+                  },
+                  onError: (error) => {
+                    toast({
+                      title: "Upload cover failed",
+                      description: error.message,
+                    });
+                  },
+                },
+              );
             },
+            onError: (error) => {
+              toast({
+                title: "Upload cover failed",
+                description: error.message,
+              });
+            },
+          },
         );
       }
     });
@@ -101,6 +104,13 @@ export function ProfileCoverPhoto({
 
   return (
     <section aria-label="Profile cover image">
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+
       <AspectRatio ratio={3 / 1} className="relative">
         {url ? (
           <Image
@@ -137,12 +147,6 @@ export function ProfileCoverPhoto({
                   <PencilIcon />
                   Upload Cover Photo
                 </DropdownMenuItem>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
               </ActionGuard>
               <ActionGuard
                 actions={actions}
