@@ -27,7 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { createGetUserProfileQueryOptions } from "@/hooks/queries/get-user-profile.query";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ProfileCoverPhoto } from "@/app/_components/profile-cover-photo";
 import { ProfileFriendsSummaryPreview } from "./profile-friends-summary-preview";
 import { ProfileFriendsSuggestionCarousel } from "./profile-friends-suggestion-carousel";
@@ -44,7 +44,7 @@ export function UserProfileLayout({
   userId,
 }: UserProfileLayoutProps) {
   const getUserProfileQuery = useQuery(
-    createGetUserProfileQueryOptions({ userId }),
+    createGetUserProfileQueryOptions({ userId })
   );
 
   const [isShowFriendSuggestion, setIsShowFriendSuggestion] =
@@ -88,7 +88,12 @@ export function UserProfileLayout({
             handleUploadClick={handleUploadClick}
             handleFileChange={handleFileChange}
           />
-
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+          />
           <div className="md:ml-4 mt-4 flex justify-between w-full gap-4 flex-col md:flex-row">
             <div
               className="flex items-center md:items-start flex-col space-y-1"

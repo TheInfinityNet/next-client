@@ -68,8 +68,8 @@ export const baseProfileResponseSchema = baseProfileSchema
     coverId: true,
   })
   .extend({
-    avatar: photoMetadataResponseSchema.optional(),
-    cover: photoMetadataResponseSchema.optional(),
+    avatar: z.lazy(() => photoMetadataResponseSchema.optional()),
+    cover: z.lazy(() => photoMetadataResponseSchema.optional()),
   });
 export const userProfileResponseSchema = baseProfileResponseSchema.extend({
   type: z.literal("User"),

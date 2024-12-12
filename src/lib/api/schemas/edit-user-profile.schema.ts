@@ -9,7 +9,7 @@ export const editUserProfileBodySchema = z.object({
   middleName: z.coerce.string().optional(),
   lastName: z.coerce.string().optional(),
   mobileNumber: z.coerce.string().optional(),
-  birthdate: z.string().date().optional(),
+  birthdate: z.coerce.string().date().optional(),
   gender: z.coerce.string().optional(),
   bio: z.coerce.string().optional(),
 });
