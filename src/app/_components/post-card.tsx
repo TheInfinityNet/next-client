@@ -151,7 +151,7 @@ export function PostCard({ post }: PostCardProps) {
             <div>{post.file.url}</div>
           ) : post.type === "Share" ? (
             <div>
-              <PostCard post={post.share} />
+              <PostCard post={post.share}/>
             </div>
           ) : post.type === "MultiMedia" ? (
             <div

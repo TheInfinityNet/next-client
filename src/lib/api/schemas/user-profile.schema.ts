@@ -1,4 +1,5 @@
 import { z } from "zod";
+import {baseProfileResponseSchema} from "@/lib/api/schemas/profile.schema";
 
 export const userProfileStatusSchema = z.enum([
   "Active",
@@ -19,6 +20,15 @@ export const userProfileResponseSchema = z.object({
   birthdate: z.string().datetime().optional(),
   gender: z.coerce.string().optional(),
 });
+
+export const profileFriendsSummaryPreviewSchema = z.object({
+  items: z.array(baseProfileResponseSchema).optional(),
+});
+
+export type ProfileFriendsSummaryPreviewResponseSchema = z.infer<
+  typeof profileFriendsSummaryPreviewSchema
+>;
+
 export type UserProfileResponseSchema = z.infer<
-  typeof userProfileResponseSchema
+    typeof userProfileResponseSchema
 >;

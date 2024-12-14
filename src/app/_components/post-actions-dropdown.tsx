@@ -12,6 +12,8 @@ import {createGetPostActionsQueryOptions} from "@/hooks/queries/get-post-actions
 import {useState} from "react";
 import {ConfirmDialog} from "@/components/ui/confirm-dialog";
 import {EditDialog} from "@/app/_components/edit-post-form";
+import {useDeletePostMutation} from "@/hooks/mutations/delete-post.mutation";
+import {toast} from "@/hooks/use-toast";
 
 type PostActionsDropdownProps = {
     postId: string;
@@ -24,7 +26,7 @@ export function PostActionsDropdown({ postId } : PostActionsDropdownProps) {
 
     const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [isEditDialogOpen, setEditDialogOpen] = useState(false);
-
+    const deletePostMutation = useDeletePostMutation();
     return (
         <>
             <DropdownMenu>
@@ -67,6 +69,20 @@ export function PostActionsDropdown({ postId } : PostActionsDropdownProps) {
                     title="Delete Post"
                     message="Are you sure you want to delete this post?"
                     onConfirm={() => {
+                        deletePostMutation.mutate(
+                            { id: postId },
+                            {
+                                onSuccess(data) {
+                                    toast({
+                                        title: "Post deleted successfully",
+                                        description: data.id,
+                                    });
+                                },
+                                onError(error) {
+                                    toast({ title: "Delete post failed" });
+                                },
+                            },
+                        );
                         console.log("Post deleted:", postId);
                         setDeleteDialogOpen(false);
                         // Add your delete logic here

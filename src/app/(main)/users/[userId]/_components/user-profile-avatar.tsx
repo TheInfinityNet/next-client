@@ -24,46 +24,10 @@ export default function UserProfileAvatar({
   const { toast } = useToast();
   const changeAvatarInputRef = useRef<HTMLInputElement>(null);
 
-  const onChangeAvatar = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      uploadPhotoMutation.mutate(
-        {
-          photo: file,
-        },
-        {
-          onSuccess(data) {
-            if (userProfile.avatar) {
-              userProfile.avatar.url = data.url;
-            }
-            toast({
-              title: "Success",
-              description: "Photo uploaded successfully",
-            });
-            console.log("Photo uploaded successfully:", data);
-          },
-          onError(error) {
-            toast({
-              title: "Error",
-              description: "Error uploading photo",
-            });
-            console.error("Error uploading photo:", error);
-          },
-        }
-      );
-    }
-  };
-
   const uploadPhotoMutation = useUploadPhotoMutation();
   const uploadAvatarPhotoMutation = useUploadAvatarMutation();
 
-    const handleUploadClick = () => {
-        if (changeAvatarInputRef.current) {
-            changeAvatarInputRef.current.click();
-        }
-    };
-
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onChangeAvatar = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
         if (!files) return;
