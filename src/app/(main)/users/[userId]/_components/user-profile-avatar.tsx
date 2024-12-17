@@ -3,10 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useUploadPhotoMutation } from "@/lib/api/apis/upload-photo.api";
 import { CameraIcon } from "lucide-react";
-import { useRef, type ChangeEvent } from "react";
+import { useRef } from "react";
 import {useUploadAvatarMutation} from "@/hooks/mutations/upload-photo-profile.mutation";
-import {toast} from "@/hooks/use-toast";
-import {mapFieldErrorToFormError} from "@/lib/utils";
 
 type UserProfileAvatarProps = {
   userProfile: {

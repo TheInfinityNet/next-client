@@ -301,7 +301,7 @@ export function PostComposer() {
 
   return (
       <Card className="w-full overflow-hidden">
-        <CardContent className="p-6">
+        <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Phần nhập nội dung bài viết */}
             <div className="flex items-start space-x-4">
